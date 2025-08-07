@@ -8,51 +8,85 @@
     :root { --blue: #007BFF; }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
+
     body {
       min-height: 100vh;
-      background: var(--blue);
+      background-color: var(--blue);
       color: #fff;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    /* Top banner */
-    header {
-      position: sticky;  /* sticks to the top on scroll */
-      top: 0;
-      z-index: 10;
-      background: var(--blue);
-      /* Respect iOS safe area on notched phones */
-      padding-top: env(safe-area-inset-top);
-    }
-    header img {
-      width: 100%;       /* full width */
-      height: auto;      /* keep aspect ratio */
-      display: block;    /* removes default inline gap */
-    }
-
+    /* Pattern background starting below banner */
     main {
-      min-height: 60vh;
+      background-image: url('mcap.png');
+      background-repeat: repeat;
+      background-size: 100px 100px; /* adjust for checker size */
+      width: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem 1rem;
       text-align: center;
+      gap: 2rem;
+    }
+
+    /* Full-width top banner */
+    header {
+      width: 100%;
+      background: var(--blue);
+    }
+    header img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    section {
+      width: 100%;
+      max-width: 1200px;
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    section h2 {
+      margin: 0;
+      padding: 1rem;
+      background: var(--blue);
+      color: #fff;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
     }
 
     @media (max-width: 480px) {
-      main { padding: 1.25rem; }
+      main { padding: 1.25rem; background-size: 60px 60px; }
       h1 { font-size: 1.4rem; }
+      section h2 { font-size: 1.2rem; }
+      iframe { height: 400px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <!-- Place marketcap-banner.png in the same folder as this index.html -->
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
   <main>
-    
+    <h1>Welcome to My Solana Memecoin</h1>
+
+    <section>
+      <h2>Buy your cap, the market isn't waiting</h2>
+      <iframe src="https://themarketingisinthemcap.com/" title="Buy your cap"></iframe>
+    </section>
   </main>
 </body>
 </html>
