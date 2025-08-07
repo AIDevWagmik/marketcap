@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Solana Memecoin</title>
   <style>
-    :root { --blue: #007BFF; }
+    :root { --blue: #007BFF; --colW: 220px; --header-h: 0px; }
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
+    html, body { margin: 0; padding: 0; height: 100%; }
 
     body {
       min-height: 100vh;
@@ -24,29 +24,37 @@
       to { background-position-y: 100%; }
     }
 
-    body::before,
-    body::after {
-      content: "";
+    /* Fixed overlay columns that start below the banner and sit ABOVE the gradient */
+    #side-columns {
       position: fixed;
-      top: 120px; /* start below the banner */
+      top: var(--header-h);
+      left: 0;
+      right: 0;
       bottom: 0;
-      width: 180px; /* bigger column */
+      pointer-events: none;
+      z-index: 0; /* above body background, below content */
+    }
+    #side-columns .col {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: var(--colW);
       background-image: url('mcap.png');
       background-repeat: repeat-y;
       background-size: contain;
+      opacity: 0.18;
       animation: floatPattern 20s linear infinite;
-      opacity: 0.15; /* subtle overlay */
-      z-index: 0;
     }
-    body::before { left: 0; }
-    body::after { right: 0; }
+    #side-columns .left { left: 0; }
+    #side-columns .right { right: 0; }
 
-    html, body { height: 100%; }
+    /* Content sits above the columns */
     header, main { position: relative; z-index: 1; }
 
+    /* Banner */
     header { width: 100%; background: transparent; }
     header img { width: 100%; height: auto; display: block; }
 
+    /* Layout paddings so content doesn't overlap side columns on desktop */
     main {
       width: 100%;
       display: flex;
@@ -54,32 +62,39 @@
       align-items: center;
       justify-content: center;
       padding: 2rem 1rem;
+      padding-left: calc(1rem + var(--colW));
+      padding-right: calc(1rem + var(--colW));
       text-align: center;
       gap: 2rem;
     }
 
-    .app-section {
-      width: 100%;
-      max-width: 1200px;
-      color: #fff;
-    }
-
+    /* FIRST SECTION (Buy) — compact, rounded title */
+    .app-section { width: 100%; max-width: 1200px; color: #fff; }
     .app-section h2 {
-      margin: 0 0 1rem 0;
-      padding: 1rem;
+      display: inline-block;
+      margin: 0 auto 1rem auto;
+      padding: 0.6rem 1rem;
       background: var(--blue);
       color: #fff;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       text-align: center;
+      border-radius: 9999px; /* rounder */
     }
 
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      display: block;
+    /* SECOND SECTION (DexScreener) — wider title and container */
+    .market-section { width: 100%; max-width: 1400px; background: #fff; color: #000; }
+    .market-section h2 {
+      margin: 0; padding: 1rem; background: var(--blue); color: #fff; font-size: 1.6rem; text-align: center;
+    }
+    .market-section iframe { width: 100%; height: 700px; border: none; display: block; }
+
+    /* Prefer desktop layout for DexScreener on larger screens by giving it more width/height */
+    @media (min-width: 1025px) {
+      .market-section { max-width: 1600px; }
+      .market-section iframe { height: 900px; }
     }
 
+    /* App icon button */
     .app-launch-wrap { display: flex; justify-content: center; padding: 1.25rem 0; }
     .app-launch {
       display: inline-flex;
@@ -111,12 +126,14 @@
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
     }
 
+    /* Mobile tweaks */
     @media (max-width: 480px) {
-      body::before, body::after { display: none; }
+      #side-columns { display: none; }
       main { padding: 1.25rem; }
       h1 { font-size: 1.4rem; }
-      .app-section h2 { font-size: 1.2rem; }
-      iframe { height: 400px; }
+      .app-section h2 { font-size: 1.1rem; }
+      .market-section h2 { font-size: 1.2rem; }
+      .market-section iframe { height: 450px; }
     }
   </style>
 </head>
@@ -125,6 +142,12 @@
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
+  <!-- Side columns overlay (starts below measured banner height) -->
+  <div id="side-columns" aria-hidden="true">
+    <div class="col left"></div>
+    <div class="col right"></div>
+  </div>
+
   <main>
     <h1>Welcome to My Solana Memecoin</h1>
 
@@ -132,17 +155,30 @@
       <h2>Buy your cap, the market isn't waiting</h2>
       <div class="app-launch-wrap">
         <a class="app-launch" href="https://themarketingisinthemcap.com/" target="_blank" rel="noopener noreferrer" aria-label="Open themarketingisinthemcap.com">
-          <img src="buy.png" alt="Open App" />
+          <img src="app.png" alt="Open App" />
           <span>Open the app</span>
         </a>
       </div>
     </div>
 
-    <section>
+    <section class="market-section">
       <h2>In the cap we believe</h2>
       <iframe src="https://dexscreener.com/solana/8dfgrjblqbnyfituml6k43sxbktz3xh3nx6mrys6rek7" title="In the cap we believe"></iframe>
     </section>
   </main>
+
+  <script>
+    // Measure banner height so side columns start exactly below it
+    function setHeaderHeightVar(){
+      const header = document.querySelector('header');
+      if (!header) return;
+      const h = header.offsetHeight;
+      document.documentElement.style.setProperty('--header-h', h + 'px');
+    }
+    window.addEventListener('load', setHeaderHeightVar);
+    window.addEventListener('resize', setHeaderHeightVar);
+  </script>
 </body>
 </html>
+
 
