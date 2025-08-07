@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Solana Memecoin</title>
   <style>
-    :root { --blue: #007BFF; --tile: 180px; }
+    :root { --blue: #007BFF; }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
 
@@ -16,9 +16,11 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    /* Area below the banner */
+    /* Full-width top banner */
+    header { width: 100%; background: var(--blue); }
+    header img { width: 100%; height: auto; display: block; }
+
     main {
-      position: relative; /* needed for overlay */
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -27,29 +29,7 @@
       padding: 2rem 1rem;
       text-align: center;
       gap: 2rem;
-      background: var(--blue);
     }
-
-    /* Checker overlay */
-    main::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background-image: url('mcap.png');
-      background-repeat: repeat;
-      background-size: var(--tile) var(--tile);
-      -webkit-mask:
-        conic-gradient(#000 0 90deg, transparent 0 180deg, #000 0 270deg, transparent 0) 0 0/var(--tile) var(--tile),
-        conic-gradient(transparent 0 90deg, #000 0 180deg, transparent 0 270deg, #000 0) calc(var(--tile)/2) calc(var(--tile)/2)/var(--tile) var(--tile);
-      mask:
-        conic-gradient(#000 0 90deg, transparent 0 180deg, #000 0 270deg, transparent 0) 0 0/var(--tile) var(--tile),
-        conic-gradient(transparent 0 90deg, #000 0 180deg, transparent 0 270deg, #000 0) calc(var(--tile)/2) calc(var(--tile)/2)/var(--tile) var(--tile);
-    }
-
-    /* Full-width top banner */
-    header { width: 100%; background: var(--blue); }
-    header img { width: 100%; height: auto; display: block; }
 
     section {
       width: 100%;
@@ -103,7 +83,6 @@
     }
 
     @media (max-width: 480px) {
-      :root { --tile: 120px; }
       main { padding: 1.25rem; }
       h1 { font-size: 1.4rem; }
       section h2 { font-size: 1.2rem; }
@@ -130,6 +109,7 @@
   </main>
 </body>
 </html>
+
 
 
 
