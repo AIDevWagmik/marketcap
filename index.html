@@ -18,7 +18,6 @@
       background-color: var(--blue);
     }
 
-    /* Patterned hat background — BELOW side columns, ABOVE body bg */
     .hat-bg {
       position: fixed;
       top: 0; bottom: 0;
@@ -37,15 +36,9 @@
       max-width: 350px;
       height: auto;
       image-rendering: high-quality;
-      opacity: 0.22;
+      opacity: 1;
     }
 
-    @keyframes floatPattern {
-      from { background-position-y: 0; }
-      to { background-position-y: 100%; }
-    }
-
-    /* Side columns */
     #side-columns {
       position: fixed;
       inset: 0;
@@ -60,12 +53,10 @@
       background-repeat: repeat-y;
       background-size: contain;
       opacity: 0.18;
-      animation: floatPattern 20s linear infinite;
     }
     #side-columns .left { left: 0; }
     #side-columns .right { right: 0; }
 
-    /* Content */
     header, main, footer { position: relative; z-index: 3; }
 
     header img { width: 100%; height: auto; display: block; }
@@ -83,8 +74,8 @@
       gap: 2rem;
     }
 
-    .app-section { width: 100%; max-width: 1200px; color: #fff; }
-    .app-section h2 {
+    .app-section, .jupiter-section { width: 100%; max-width: 1200px; color: #fff; }
+    .app-section h2, .jupiter-section h2 {
       display: inline-block;
       margin: 0 auto 1rem auto;
       padding: 0.5rem 0.9rem;
@@ -136,20 +127,16 @@
       display: block;
       border-radius: 24px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.25);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
       background: #ffffff;
     }
-    .app-launch:hover img, .app-launch:focus img {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
-    }
-    .app-launch span {
-      background: var(--blue);
-      color: #fff;
-      font-weight: 700;
-      padding: 0.5rem 0.85rem;
-      border-radius: 999px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+
+    .jupiter-iframe {
+      border: none;
+      width: 100%;
+      max-width: 600px;
+      height: 800px;
+      border-radius: 16px;
+      overflow: hidden;
     }
 
     footer img { width: 100%; height: auto; display: block; }
@@ -159,7 +146,7 @@
       .hat-bg { left: 0; right: 0; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); grid-auto-rows: 150px; }
       main { padding: 1.25rem; }
       h1 { font-size: 1.4rem; }
-      .app-section h2 { font-size: 1.05rem; }
+      .app-section h2, .jupiter-section h2 { font-size: 1.05rem; }
       .market-section { max-width: 100%; border-radius: 12px; }
       .market-section h2 { font-size: 1.15rem; }
     }
@@ -170,7 +157,6 @@
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
-  <!-- patterned hats in clear grid pattern -->
   <div class="hat-bg" aria-hidden="true">
     <script>
       const hats = ["hat1.png","hat2.png","hat3.png","hat4.png","hat5.png","hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"];
@@ -193,17 +179,22 @@
     <div class="app-section">
       <h2>Buy your cap, the market isn't waiting</h2>
       <div class="app-launch-wrap">
-        <a class="app-launch" href="https://themarketingisinthemcap.com/" target="_blank" rel="noopener noreferrer" aria-label="Open themarketingisinthemcap.com">
-          <img src="buy.png" alt="Open App" />
+        <a class="app-launch" href="https://themarketingisinthemcap.com/" target="_blank" rel="noopener noreferrer">
+          <img src="mcap.png" alt="Open App" />
           <span>Open the app</span>
         </a>
       </div>
     </div>
 
+    <div class="jupiter-section">
+      <h2>Buy $MCAP directly with Jupiter</h2>
+      <iframe class="jupiter-iframe" src="https://jup.ag/swap/USDC-HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk" title="Buy $MCAP on Jupiter"></iframe>
+    </div>
+
     <section class="market-section">
       <h2>In the cap we believe</h2>
       <div id="dexscreener-embed">
-        <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15" title="In the cap we believe"></iframe>
+        <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15"></iframe>
       </div>
     </section>
   </main>
@@ -212,5 +203,6 @@
     <img src="mcap-end.png" alt="MCAP end banner" />
   </footer>
 </body>
+</html>
 </html>
 
