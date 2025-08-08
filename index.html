@@ -12,25 +12,33 @@
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, var(--blue) 0%, #0056b3 50%, var(--blue) 100%);
-      background-attachment: fixed; /* gradient base layer */
+      background-attachment: fixed;
       color: #fff;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Random scattered hat images — ABOVE gradient, BELOW columns/sections */
+    /* Patterned hat background — ABOVE gradient, BELOW content, but not under side columns */
     .hat-bg {
       position: fixed;
-      inset: 0;
+      top: 0; bottom: 0;
+      left: var(--colW);
+      right: var(--colW);
       pointer-events: none;
-      z-index: 0; /* base overlay layer */
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      grid-auto-rows: 350px;
+      justify-items: center;
+      align-items: center;
     }
     .hat-bg img {
-      position: absolute;
-      width: clamp(140px, 14vw, 260px); /* much bigger */
-      opacity: 0.18;
-      /* no rotation, no movement — respect original orientation */
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      image-rendering: high-quality;
+      opacity: 0.22;
     }
 
     @keyframes floatPattern {
@@ -38,12 +46,12 @@
       to { background-position-y: 100%; }
     }
 
-    /* Side columns — ABOVE hats, BELOW content */
+    /* Side columns */
     #side-columns {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 1; /* sits above hats */
+      z-index: 2;
     }
     #side-columns .col {
       position: absolute;
@@ -58,8 +66,8 @@
     #side-columns .left { left: 0; }
     #side-columns .right { right: 0; }
 
-    /* Content layered ABOVE columns */
-    header, main, footer { position: relative; z-index: 2; }
+    /* Content */
+    header, main, footer { position: relative; z-index: 3; }
 
     header img { width: 100%; height: auto; display: block; }
 
@@ -90,7 +98,7 @@
 
     .market-section {
       width: 100%;
-      max-width: 800px; /* smaller */
+      max-width: 800px;
       background: #ffffff;
       color: #000;
       border-radius: 16px;
@@ -149,6 +157,7 @@
 
     @media (max-width: 480px) {
       #side-columns { display: none; }
+      .hat-bg { left: 0; right: 0; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); grid-auto-rows: 150px; }
       main { padding: 1.25rem; }
       h1 { font-size: 1.4rem; }
       .app-section h2 { font-size: 1.05rem; }
@@ -162,22 +171,18 @@
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
-  <!-- scattered hats ABOVE gradient, BELOW columns/banner/sections -->
+  <!-- patterned hats in clear grid pattern -->
   <div class="hat-bg" aria-hidden="true">
     <script>
       const hats = ["hat1.png","hat2.png","hat3.png","hat4.png","hat5.png","hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"];
-      for(let i=0;i<20;i++){
+      for(let i=0;i<40;i++){
         const img=document.createElement('img');
-        img.src=hats[Math.floor(Math.random()*hats.length)];
-        img.style.top=(Math.random()*100)+'%';
-        img.style.left=(Math.random()*100)+'%';
-        // keep original orientation: no rotation
+        img.src=hats[i % hats.length];
         document.currentScript.parentNode.appendChild(img);
       }
     </script>
   </div>
 
-  <!-- side columns ABOVE hats, BELOW content -->
   <div id="side-columns" aria-hidden="true">
     <div class="col left"></div>
     <div class="col right"></div>
@@ -209,4 +214,3 @@
   </footer>
 </body>
 </html>
-
