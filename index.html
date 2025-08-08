@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Solana Memecoin</title>
+  <title>The MCAP Cult</title>
   <style>
-    :root { --blue: #007BFF; --colW: 220px; --header-h: 0px; }
+    :root { --blue: #007BFF; --colW: 220px; }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; }
 
@@ -18,21 +18,19 @@
       position: relative;
     }
 
-    /* Animated floating effect for side columns */
     @keyframes floatPattern {
       from { background-position-y: 0; }
       to { background-position-y: 100%; }
     }
 
-    /* Fixed overlay columns that start below the banner and sit ABOVE the gradient */
     #side-columns {
       position: fixed;
-      top: var(--header-h);
+      top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       pointer-events: none;
-      z-index: 0; /* above body background, below content */
+      z-index: 0;
     }
     #side-columns .col {
       position: absolute;
@@ -47,14 +45,11 @@
     #side-columns .left { left: 0; }
     #side-columns .right { right: 0; }
 
-    /* Content sits above the columns */
-    header, main { position: relative; z-index: 1; }
+    header, main, footer { position: relative; z-index: 1; }
 
-    /* Banner */
     header { width: 100%; background: transparent; }
     header img { width: 100%; height: auto; display: block; }
 
-    /* Layout paddings so content doesn't overlap side columns on desktop */
     main {
       width: 100%;
       display: flex;
@@ -68,33 +63,45 @@
       gap: 2rem;
     }
 
-    /* FIRST SECTION (Buy) — compact, rounded title */
     .app-section { width: 100%; max-width: 1200px; color: #fff; }
     .app-section h2 {
       display: inline-block;
       margin: 0 auto 1rem auto;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 0.9rem;
       background: var(--blue);
       color: #fff;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       text-align: center;
-      border-radius: 9999px; /* rounder */
+      border-radius: 9999px;
     }
 
-    /* SECOND SECTION (DexScreener) — wider title and container */
-    .market-section { width: 100%; max-width: 1400px; background: #fff; color: #000; }
+    .market-section {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      color: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
     .market-section h2 {
-      margin: 0; padding: 1rem; background: var(--blue); color: #fff; font-size: 1.6rem; text-align: center;
-    }
-    .market-section iframe { width: 100%; height: 700px; border: none; display: block; }
-
-    /* Prefer desktop layout for DexScreener on larger screens by giving it more width/height */
-    @media (min-width: 1025px) {
-      .market-section { max-width: 1600px; }
-      .market-section iframe { height: 900px; }
+      margin: 0;
+      padding: 0.85rem 1rem;
+      background: var(--blue);
+      color: #fff;
+      font-size: 1.4rem;
+      text-align: center;
     }
 
-    /* App icon button */
+    #dexscreener-embed { position: relative; width: 100%; padding-bottom: 125%; }
+    @media (min-width: 1400px) {
+      #dexscreener-embed { padding-bottom: 65%; }
+      .market-section { max-width: 1400px; }
+    }
+    #dexscreener-embed iframe {
+      position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: 0;
+    }
+
     .app-launch-wrap { display: flex; justify-content: center; padding: 1.25rem 0; }
     .app-launch {
       display: inline-flex;
@@ -126,14 +133,19 @@
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
     }
 
-    /* Mobile tweaks */
+    footer img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     @media (max-width: 480px) {
       #side-columns { display: none; }
       main { padding: 1.25rem; }
       h1 { font-size: 1.4rem; }
-      .app-section h2 { font-size: 1.1rem; }
-      .market-section h2 { font-size: 1.2rem; }
-      .market-section iframe { height: 450px; }
+      .app-section h2 { font-size: 1.05rem; }
+      .market-section { max-width: 100%; border-radius: 12px; }
+      .market-section h2 { font-size: 1.15rem; }
     }
   </style>
 </head>
@@ -142,20 +154,19 @@
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
-  <!-- Side columns overlay (starts below measured banner height) -->
   <div id="side-columns" aria-hidden="true">
     <div class="col left"></div>
     <div class="col right"></div>
   </div>
 
   <main>
-    <h1>Welcome to My Solana Memecoin</h1>
+    <h1>All the markets need the §MCAP</h1>
 
     <div class="app-section">
       <h2>Buy your cap, the market isn't waiting</h2>
       <div class="app-launch-wrap">
         <a class="app-launch" href="https://themarketingisinthemcap.com/" target="_blank" rel="noopener noreferrer" aria-label="Open themarketingisinthemcap.com">
-          <img src="app.png" alt="Open App" />
+          <img src="mcap.png" alt="Open App" />
           <span>Open the app</span>
         </a>
       </div>
@@ -163,22 +174,17 @@
 
     <section class="market-section">
       <h2>In the cap we believe</h2>
-      <iframe src="https://dexscreener.com/solana/8dfgrjblqbnyfituml6k43sxbktz3xh3nx6mrys6rek7" title="In the cap we believe"></iframe>
+      <div id="dexscreener-embed">
+        <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15" title="In the cap we believe"></iframe>
+      </div>
     </section>
   </main>
 
-  <script>
-    // Measure banner height so side columns start exactly below it
-    function setHeaderHeightVar(){
-      const header = document.querySelector('header');
-      if (!header) return;
-      const h = header.offsetHeight;
-      document.documentElement.style.setProperty('--header-h', h + 'px');
-    }
-    window.addEventListener('load', setHeaderHeightVar);
-    window.addEventListener('resize', setHeaderHeightVar);
-  </script>
+  <footer>
+    <img src="mcap-end.png" alt="MCAP end banner" />
+  </footer>
 </body>
 </html>
+
 
 
