@@ -12,24 +12,25 @@
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, var(--blue) 0%, #0056b3 50%, var(--blue) 100%);
-      background-attachment: fixed;
+      background-attachment: fixed; /* gradient base layer */
       color: #fff;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Random scattered hat images */
+    /* Random scattered hat images — ABOVE gradient, BELOW columns/sections */
     .hat-bg {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 0; /* base overlay layer */
     }
     .hat-bg img {
       position: absolute;
-      width: 80px;
-      opacity: 0.15;
+      width: clamp(140px, 14vw, 260px); /* much bigger */
+      opacity: 0.18;
+      /* no rotation, no movement — respect original orientation */
     }
 
     @keyframes floatPattern {
@@ -37,14 +38,12 @@
       to { background-position-y: 100%; }
     }
 
+    /* Side columns — ABOVE hats, BELOW content */
     #side-columns {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1; /* sits above hats */
     }
     #side-columns .col {
       position: absolute;
@@ -59,7 +58,8 @@
     #side-columns .left { left: 0; }
     #side-columns .right { right: 0; }
 
-    header, main, footer { position: relative; z-index: 1; }
+    /* Content layered ABOVE columns */
+    header, main, footer { position: relative; z-index: 2; }
 
     header img { width: 100%; height: auto; display: block; }
 
@@ -90,7 +90,7 @@
 
     .market-section {
       width: 100%;
-      max-width: 800px; /* much smaller */
+      max-width: 800px; /* smaller */
       background: #ffffff;
       color: #000;
       border-radius: 16px;
@@ -162,24 +162,25 @@
     <img src="marketcap-banner.png" alt="Marketcap banner" loading="eager" />
   </header>
 
-  <div id="side-columns" aria-hidden="true">
-    <div class="col left"></div>
-    <div class="col right"></div>
-  </div>
-
-  <!-- scattered hats -->
+  <!-- scattered hats ABOVE gradient, BELOW columns/banner/sections -->
   <div class="hat-bg" aria-hidden="true">
     <script>
       const hats = ["hat1.png","hat2.png","hat3.png","hat4.png","hat5.png","hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"];
       for(let i=0;i<20;i++){
         const img=document.createElement('img');
         img.src=hats[Math.floor(Math.random()*hats.length)];
-        img.style.top=Math.random()*100+'%';
-        img.style.left=Math.random()*100+'%';
-        img.style.transform=`rotate(${Math.random()*360}deg)`;
+        img.style.top=(Math.random()*100)+'%';
+        img.style.left=(Math.random()*100)+'%';
+        // keep original orientation: no rotation
         document.currentScript.parentNode.appendChild(img);
       }
     </script>
+  </div>
+
+  <!-- side columns ABOVE hats, BELOW content -->
+  <div id="side-columns" aria-hidden="true">
+    <div class="col left"></div>
+    <div class="col right"></div>
   </div>
 
   <main>
@@ -208,3 +209,4 @@
   </footer>
 </body>
 </html>
+
