@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The MCAP Cult</title>
-  <script src="https://terminal.jup.ag/main-v2.js"></script>
+  <!-- Jupiter Plugin (modal) -->
+  <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
-    :root { --blue: #68a1dd; --colW: 220px; }
+    :root { --blue: #bde9ff; --colW: 220px; }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; }
 
@@ -19,7 +20,7 @@
       background-color: var(--blue);
     }
 
-    /* HATS BACKGROUND: now scroll-reactive (parallax) */
+    /* HATS BACKGROUND: continuous top->bottom motion */
     .hat-bg {
       position: fixed;
       top: 0; bottom: 0;
@@ -33,6 +34,7 @@
       justify-items: center;
       align-items: center;
       will-change: transform;
+      animation: hatsScroll 30s linear infinite;
     }
     .hat-bg img {
       width: 100%;
@@ -42,7 +44,7 @@
       opacity: 1;
     }
 
-    /* SIDE COLUMNS: fixed layer but scroll-synced background */
+    /* SIDE COLUMNS: animated loop from top to bottom (not tied to page scroll) */
     #side-columns {
       position: fixed;
       inset: 0;
@@ -57,6 +59,7 @@
       background-repeat: repeat-y;
       background-size: contain;
       opacity: 0.18;
+      animation: columnsScroll 22s linear infinite;
       will-change: background-position;
     }
     #side-columns .left { left: 0; }
@@ -135,9 +138,14 @@
       background: #ffffff;
     }
 
-    #jupiter-terminal { height: 600px; max-width: 600px; margin: 0 auto; }
+    /* Simple CTA button for opening Jupiter modal */
+    #open-jup { cursor:pointer; background: var(--blue); color:#fff; border:none; border-radius:9999px; padding:0.6rem 1rem; font-weight:700; }
 
     footer img { width: 100%; height: auto; display: block; }
+
+    /* Animations */
+    @keyframes columnsScroll { from { background-position-y: 0; } to { background-position-y: 1000px; } }
+    @keyframes hatsScroll { from { transform: translateY(0); } to { transform: translateY(200px); } }
 
     @media (max-width: 480px) {
       #side-columns { display: none; }
@@ -186,14 +194,22 @@
 
     <div class="jupiter-section">
       <h2>Buy $MCAP directly with Jupiter</h2>
-      <div id="jupiter-terminal"></div>
+      <button id="open-jup">Open Swap</button>
       <script>
-        window.Jupiter.init({
-          displayMode: "widget",
-          widgetParameters: {
-            containerSelector: "#jupiter-terminal",
-            defaultInputMint: "So11111111111111111111111111111111111111112",
-            defaultOutputMint: "HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk"
+        window.addEventListener('load', function(){
+          if(window.Jupiter){
+            window.Jupiter.init({
+              displayMode: 'modal',
+              formProps: {
+                initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+                initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
+              }
+            });
+          }
+        });
+        document.addEventListener('click', function(e){
+          if(e.target && e.target.id === 'open-jup' && window.Jupiter && window.Jupiter.resume){
+            window.Jupiter.resume();
           }
         });
       </script>
@@ -210,28 +226,7 @@
   <footer>
     <img src="mcap-end.png" alt="MCAP end banner" />
   </footer>
-
-  <script>
-    // Scroll-sync background elements for a lively feel
-    (function(){
-      const hat = document.querySelector('.hat-bg');
-      const left = document.querySelector('#side-columns .left');
-      const right = document.querySelector('#side-columns .right');
-
-      function onScroll(){
-        const y = window.scrollY || window.pageYOffset || 0;
-        // Parallax: hats move slower than content
-        if(hat) hat.style.transform = `translateY(${y * 0.2}px)`;
-        // Columns' pattern scrolls at a different speed
-        if(left) left.style.backgroundPositionY = `${y * 0.5}px`;
-        if(right) right.style.backgroundPositionY = `${y * 0.5}px`;
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
-  </script>
 </body>
 </html>
 
-</html>
 
