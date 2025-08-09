@@ -349,7 +349,7 @@ header::after {
   height: 64px;                /* fade length (desktop) */
   pointer-events: none;
   /* use your page bg variable; fallback to #bde9ff */
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--blue, #bde9ff) 100%);
+  background: linear-gradient(to bottom, rgba(189,233,255,0) 0%, rgba(189,233,255,0.85) 100%);
   z-index: 1;                  /* above the image inside header */
 }
 
@@ -360,7 +360,7 @@ footer::before {
   left: 0; right: 0; top: 0;
   height: 64px;                /* fade length (desktop) */
   pointer-events: none;
-  background: linear-gradient(to top, rgba(0,0,0,0) 0%, var(--blue, #bde9ff) 100%);
+  background: linear-gradient(to top, rgba(189,233,255,0) 0%, rgba(189,233,255,0.85) 100%);
   z-index: 1;
 }
 
@@ -368,6 +368,126 @@ footer::before {
 @media (max-width: 480px) {
   header::after,
   footer::before { height: 40px; }
+}
+
+/* ===== Visual depth & motion add‑on ===== */
+
+/* Reusable tokens */
+:root{
+  --titleBlue: var(--blue-title, #2877cd);
+  --shadow-1: 0 6px 16px rgba(0,0,0,.16);
+  --shadow-2: 0 12px 28px rgba(0,0,0,.22);
+  --shadow-3: 0 18px 44px rgba(0,0,0,.28);
+  --ring: 0 0 0 1px rgba(255,255,255,.35) inset;
+}
+
+/* 1) Gentle page highlight so background feels less flat */
+main::before{
+  content:"";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events:none;
+  background:
+    radial-gradient(1000px 400px at 50% -100px, rgba(255,255,255,.35), rgba(255,255,255,0) 60%),
+    radial-gradient(800px 300px at 50% 120%, rgba(255,255,255,.25), rgba(255,255,255,0) 60%);
+}
+main { position: relative; }
+
+/* 2) Title pills & helper text: light 3D look */
+.app-section h2,
+.jupiter-section h2,
+.market-section h2,
+.memes-section h2,
+.canvas-section h2,
+.canvas-tip{
+  background: var(--titleBlue);
+  color:#fff;
+  border-radius:9999px;
+  box-shadow: var(--shadow-1);
+  padding: 0.5rem 0.9rem;
+  display:inline-block;
+  border: 1px solid rgba(255,255,255,.28);
+}
+
+/* hover micro‑lift for titles */
+.app-section h2:hover,
+.jupiter-section h2:hover,
+.market-section h2:hover,
+.memes-section h2:hover,
+.canvas-section h2:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.app-section h2,
+.jupiter-section h2,
+.market-section h2,
+.memes-section h2,
+.canvas-section h2{ transition: transform .18s ease, box-shadow .18s ease; }
+
+/* 3) Card depth for sections with boxes */
+.market-section{
+  box-shadow: var(--shadow-2);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.6);
+}
+
+/* 4) App buttons & Jupiter trigger: bouncy, 3D-ish */
+.app-launch img,
+#open-jup{
+  box-shadow: var(--shadow-2);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.app-launch img:hover,
+#open-jup:hover{
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-3);
+  filter: saturate(1.05);
+}
+/* subtle heartbeat glow */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: var(--shadow-2); }
+  50%     { box-shadow: 0 16px 48px rgba(40,119,205,.45); }
+}
+.app-launch img:focus-visible,
+#open-jup:focus-visible{
+  animation: pulseGlow 1.4s ease-in-out 1;
+  outline: none;
+}
+
+/* 5) Make the main H1 match the pills (optional) */
+main > h1{
+  display:inline-block;
+  padding: .5rem .9rem;
+  background: var(--titleBlue);
+  color:#fff;
+  border-radius:9999px;
+  box-shadow: var(--shadow-1);
+  border: 1px solid rgba(255,255,255,.28);
+}
+
+/* 6) Side columns & hats: add light glow for depth */
+#side-columns .col{
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.18));
+}
+.hat-bg img{
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.15));
+}
+
+/* 7) Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  .app-launch img,
+  #open-jup,
+  .app-section h2,
+  .jupiter-section h2,
+  .market-section h2,
+  .memes-section h2,
+  .canvas-section h2{
+    transition: none;
+    animation: none;
+  }
 }
 
   </style>
