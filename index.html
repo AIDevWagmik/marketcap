@@ -338,6 +338,38 @@ body {
   .btn, .file-btn{ padding:0.5rem 0.9rem; }
 }
 
+/* Smoothly blend top & bottom banners into page background */
+header, footer { position: relative; }
+
+/* Top banner fades into page background at its bottom edge */
+header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 64px;                /* fade length (desktop) */
+  pointer-events: none;
+  /* use your page bg variable; fallback to #bde9ff */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--blue, #bde9ff) 100%);
+  z-index: 1;                  /* above the image inside header */
+}
+
+/* Bottom banner fades into page background at its top edge */
+footer::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 64px;                /* fade length (desktop) */
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0) 0%, var(--blue, #bde9ff) 100%);
+  z-index: 1;
+}
+
+/* Mobile: slightly shorter fades so they don't dominate */
+@media (max-width: 480px) {
+  header::after,
+  footer::before { height: 40px; }
+}
+
   </style>
 </head>
 <body>
