@@ -8,30 +8,18 @@
   <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
 /* === MCAP color overrides — paste at END of <style> === */
-:root{
-  --blue: #bde9ff;          /* keep page + hats background */
-  --titleBlue: #2877cd;     /* section titles/buttons */
-}
+:root { --blue: #bde9ff; --colW: 220px; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
 
-/* Keep site background light */
-body{ background-color: var(--blue) !important; }
-
-/* Make all section title pills dark blue (like $MCAP MEMES) */
-.app-section h2,
-.jupiter-section h2,
-.market-section h2,
-.memes-section h2,
-#open-jup{
-  background: var(--titleBlue) !important;
-  color: #fff !important;
-}
-
-/* If you want the Dexscreener box itself blue, keep this.
-   If you prefer a white box, delete this rule. */
-.market-section{
-  background: var(--titleBlue) !important;
-  color:#fff !important;
-}
+    body {
+      min-height: 100vh;
+      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      position: relative;
+      overflow-x: hidden;
+      background-color: var(--blue);
+    }
 
     /* HATS BACKGROUND: continuous top->bottom motion */
     .hat-bg {
