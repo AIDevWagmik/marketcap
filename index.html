@@ -8,18 +8,23 @@
   <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
 /* === MCAP color overrides — paste at END of <style> === */
-:root { --blue: #bde9ff; --colW: 220px; }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; }
+:root {
+  --blue-bg: #bde9ff;     /* Page background & hats */
+  --blue-title: #2877cd;  /* Section titles & buttons */
+  --colW: 220px;
+}
 
-    body {
-      min-height: 100vh;
-      color: #fff;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      position: relative;
-      overflow-x: hidden;
-      background-color: var(--blue);
-    }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+
+body {
+  min-height: 100vh;
+  color: #fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  background-color: var(--blue-bg); /* stays light */
+}
 
     /* HATS BACKGROUND: continuous top->bottom motion */
     .hat-bg {
@@ -88,7 +93,7 @@
       display: inline-block;
       margin: 0 auto 1rem auto;
       padding: 0.5rem 0.9rem;
-      background: var(--blue);
+      background: var(--blue-title);
       color: #fff;
       font-size: 1.15rem;
       text-align: center;
@@ -103,6 +108,7 @@
       border-radius: 16px;
       overflow: hidden;
       margin: 0 auto;
+      background: var(--blue-title);
     }
     .market-section h2 {
       margin: 0;
