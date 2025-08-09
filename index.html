@@ -7,18 +7,35 @@
   <!-- Jupiter Plugin (modal) -->
   <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
-   :root { --blue: #2877cd; --colW: 220px; }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; }
+  :root { 
+  --blue-bg: #bde9ff;     /* background + behind hats */
+  --blue-title: #2877cd;  /* section titles + buttons */
+  --colW: 220px;
+}
 
-    body {
-      min-height: 100vh;
-      color: #fff;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      position: relative;
-      overflow-x: hidden;
-      background-color: var(--blue);
-    }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+
+body {
+  min-height: 100vh;
+  color: #fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  background-color: var(--blue-bg);
+}
+
+/* Titles and headers use the dark blue */
+.app-section h2,
+.jupiter-section h2,
+.market-section h2 {
+  background: var(--blue-title);
+}
+
+/* Optional: Open Swap button if kept */
+#open-jup {
+  background: var(--blue-title);
+}
 
     /* HATS BACKGROUND: continuous top->bottom motion */
     .hat-bg {
@@ -200,24 +217,24 @@
       <span>Open Swap</span>
     </a>
   </div>
-  <script>
-    window.addEventListener('load', function(){
-      if(window.Jupiter){
-        window.Jupiter.init({
-          displayMode: 'modal',
-          formProps: {
-            initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
-            initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
-          }
+ <script>
+  window.addEventListener('load', function(){
+    if (window.Jupiter) {
+      window.Jupiter.init({
+        displayMode: 'modal',
+        formProps: {
+          initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+          initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
+        }
+      }).then(() => {
+        // Don't auto-open; wait for click
+        document.getElementById('open-jup').addEventListener('click', function(){
+          window.Jupiter.resume();
         });
-      }
-    });
-    document.addEventListener('click', function(e){
-      if(e.target.closest('#open-jup') && window.Jupiter && window.Jupiter.resume){
-        window.Jupiter.resume();
-      }
-    });
-  </script>
+      });
+    }
+  });
+</script>
 </div>
 
 
