@@ -28,8 +28,19 @@ body {
 /* Titles and headers use the dark blue */
 .app-section h2,
 .jupiter-section h2,
-.market-section h2 {
+.market-section h2,
+#open-jup {
   background: var(--blue-title);
+}
+
+.market-section {
+  background: #ffffff; /* White box */
+  color: #000;
+}
+
+.market-section h2 {
+  background: var(--blue-title); /* Dark blue title bar */
+  color: #fff;
 }
 
 /* Optional: Open Swap button if kept */
@@ -51,7 +62,7 @@ body {
       justify-items: center;
       align-items: center;
       will-change: transform;
-      animation: hatsScroll 30s linear infinite;
+      animation: hatsScroll 20s linear infinite;
     }
     .hat-bg img {
       width: 100%;
@@ -177,6 +188,7 @@ body {
     .memes-section {
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 .memes-section h2 {
@@ -191,29 +203,34 @@ body {
 }
 
 .memes-scroll {
-  display: flex;
-  gap: 1rem;
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  white-space: nowrap;
-  animation: memesLoop 30s linear infinite;
 }
 
-.memes-scroll img {
+.memes-track {
+  display: flex;
+  gap: 1rem;
+  animation: scrollMemes 30s linear infinite;
+}
+
+.memes-track img {
   width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 12px;
+  flex-shrink: 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
-.memes-scroll img:hover {
+.memes-track img:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
-/* Loop animation */
-@keyframes memesLoop {
+/* Smooth infinite scroll */
+@keyframes scrollMemes {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
@@ -316,20 +333,39 @@ body {
       </div>
     </section>
 
-    <div class="memes-section">
+   <div class="memes-section">
   <h2>$MCAP MEMES</h2>
   <div class="memes-scroll">
-    <img src="meme1.png" alt="Meme 1">
-    <img src="meme2.png" alt="Meme 2">
-    <img src="meme3.png" alt="Meme 3">
-    <img src="meme4.png" alt="Meme 4">
-    <img src="meme5.png" alt="Meme 5">
-    <img src="meme6.png" alt="Meme 6">
-    <img src="meme7.png" alt="Meme 7">
-    <img src="meme8.png" alt="Meme 8">
-    <img src="meme9.png" alt="Meme 9">
+    <div class="memes-track">
+      <img src="meme1.png" alt="Meme 1">
+      <img src="meme2.png" alt="Meme 2">
+      <img src="meme3.png" alt="Meme 3">
+      <img src="meme4.png" alt="Meme 4">
+      <img src="meme5.png" alt="Meme 5">
+      <img src="meme6.png" alt="Meme 6">
+      <img src="meme7.png" alt="Meme 7">
+      <img src="meme8.png" alt="Meme 8">
+      <img src="meme9.png" alt="Meme 9">
+      <!-- Duplicate set for smooth infinite loop -->
+      <img src="meme1.png" alt="Meme 1">
+      <img src="meme2.png" alt="Meme 2">
+      <img src="meme3.png" alt="Meme 3">
+      <img src="meme4.png" alt="Meme 4">
+      <img src="meme5.png" alt="Meme 5">
+      <img src="meme6.png" alt="Meme 6">
+      <img src="meme7.png" alt="Meme 7">
+      <img src="meme8.png" alt="Meme 8">
+      <img src="meme9.png" alt="Meme 9">
+    </div>
   </div>
 </div>
+
+<!-- Fullscreen modal for meme -->
+<div id="meme-modal">
+  <span id="meme-close">&times;</span>
+  <img id="meme-full" src="" alt="Expanded Meme">
+</div>
+
 
 <!-- Fullscreen modal for meme -->
 <div id="meme-modal">
