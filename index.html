@@ -240,6 +240,80 @@ body {
   cursor: pointer;
 }
 
+/* Canvas section styling (uses your dark blue, with fallback) */
+.canvas-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+.canvas-section h2{
+  display:inline-block;
+  margin:0 auto 1rem auto;
+  padding:0.5rem 0.9rem;
+  background: var(--blue-title, #2877cd);
+  color:#fff;
+  border-radius:9999px;
+  font-size:1.15rem;
+  text-align:center;
+}
+
+.canvas-controls{
+  display:flex;
+  gap:0.75rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:0.75rem;
+}
+.btn, .file-btn{
+  background: var(--blue-title, #2877cd);
+  color:#fff;
+  border:none;
+  border-radius:9999px;
+  padding:0.55rem 1rem;
+  font-weight:700;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.file-btn input{ display:none; }
+.btn-ghost{
+  background: transparent;
+  color:#fff;
+  border:2px solid rgba(255,255,255,0.7);
+}
+.canvas-wrap{
+  position:relative;
+  width:100%;
+  max-width: 100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  /* Critical: prevent browser panning/zooming while touching canvas */
+  touch-action: none;
+  user-select:none;
+}
+#hatCanvas{
+  width: min(100%, 1000px);
+  height: auto;
+  background: rgba(0,0,0,0.15);
+  border-radius:16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+.canvas-tip{
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px){
+  .canvas-section h2{ font-size:1.05rem; }
+  .btn, .file-btn{ padding:0.5rem 0.9rem; }
+}
+
   </style>
 </head>
 <body>
@@ -379,6 +453,305 @@ body {
     }
   });
 </script>
+
+<section class="canvas-section">
+  <h2 style="background: var(--blue-title, #2877cd); color: #fff;">
+    Put on your MCAP, and join the cult
+  </h2>
+
+  <div class="canvas-controls">
+    <label class="file-btn">
+      <input type="file" id="imgUpload" accept="image/png,image/jpeg" />
+      Upload PNG/JPG
+    </label>
+    <button id="addHatBtn" class="btn">Add hat.png</button>
+    <button id="resetHatBtn" class="btn btn-ghost">Reset</button>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="hatCanvas" width="900" height="600" aria-label="Hat editor canvas"></canvas>
+  </div>
+  <p class="canvas-tip">
+    Desktop: drag to move • Mouse wheel: scale • Alt + wheel: rotate • Arrows: nudge • [ / ]: rotate • +/-: scale
+    <br>Mobile: 1-finger drag • 2-finger pinch to scale & rotate
+  </p>
+</section>
+<script>
+(function(){
+  const canvas = document.getElementById('hatCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // HiDPI canvas scale for crispness
+  function setupHiDPI(){
+    const ratio = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight;
+    canvas.width  = Math.round(cssW * ratio);
+    canvas.height = Math.round(cssH * ratio);
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+  }
+  setupHiDPI();
+  window.addEventListener('resize', () => {
+    setupHiDPI();
+    fitBaseToCanvas();
+    draw();
+  });
+
+  // Elements
+  const upload = document.getElementById('imgUpload');
+  const addHatBtn = document.getElementById('addHatBtn');
+  const resetHatBtn = document.getElementById('resetHatBtn');
+
+  // Base image state
+  let baseImg = null;
+  let baseDraw = { x:0, y:0, w:0, h:0 }; // fitted rect
+
+  // Hat state
+  let hatImg = new Image();
+  hatImg.src = 'hat.png';
+  let hat = {
+    x: 0, y: 0,        // center position in canvas CSS pixels
+    w: 220, h: 160,    // natural draw size
+    scale: 1,
+    rot: 0,            // radians
+    visible: false
+  };
+
+  // Pointer state
+  let dragging = false;
+  let lastPos = null;
+
+  // Multi-touch state
+  let touches = new Map(); // id -> {x,y}
+  let pinchStart = null;   // {dist, angle, cx, cy, scale0, rot0, x0, y0}
+
+  // Utility
+  function getMousePos(evt){
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (evt.clientX - rect.left),
+      y: (evt.clientY - rect.top)
+    };
+  }
+  function getTouchPos(t){
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (t.clientX - rect.left),
+      y: (t.clientY - rect.top)
+    };
+  }
+  function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+  function angle(a,b){ return Math.atan2(b.y-a.y, b.x-a.x); }
+  function mid(a,b){ return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }; }
+
+  // Fit base image to canvas
+  function fitBaseToCanvas(){
+    if(!baseImg) return;
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const ir = baseImg.width / baseImg.height;
+    const cr = cw / ch;
+    let w,h,x,y;
+    if(ir > cr){ // image wider
+      w = cw; h = cw / ir;
+      x = 0;  y = (ch - h)/2;
+    } else {
+      h = ch; w = ch * ir;
+      x = (cw - w)/2; y = 0;
+    }
+    baseDraw = {x,y,w,h};
+  }
+
+  // Drawing
+  function draw(){
+    // clear
+    ctx.clearRect(0,0,canvas.clientWidth, canvas.clientHeight);
+
+    // base
+    if(baseImg){
+      ctx.drawImage(baseImg, baseDraw.x, baseDraw.y, baseDraw.w, baseDraw.h);
+    }
+
+    // hat
+    if(hat.visible && hatImg.complete){
+      ctx.save();
+      ctx.translate(hat.x, hat.y);
+      ctx.rotate(hat.rot);
+      const dw = hat.w * hat.scale;
+      const dh = hat.h * hat.scale;
+      ctx.drawImage(hatImg, -dw/2, -dh/2, dw, dh);
+      ctx.restore();
+    }
+  }
+
+  // Hit test: point inside current hat rect
+  function hitHat(p){
+    if(!hat.visible) return false;
+    // inverse transform point into hat local space
+    const s = Math.sin(-hat.rot), c = Math.cos(-hat.rot);
+    const dx = p.x - hat.x, dy = p.y - hat.y;
+    const lx = dx * c - dy * s;
+    const ly = dx * s + dy * c;
+    const hw = (hat.w * hat.scale)/2;
+    const hh = (hat.h * hat.scale)/2;
+    return Math.abs(lx) <= hw && Math.abs(ly) <= hh;
+  }
+
+  // Image upload
+  upload.addEventListener('change', e=>{
+    const file = upload.files && upload.files[0];
+    if(!file) return;
+    const img = new Image();
+    img.onload = ()=>{
+      baseImg = img;
+      fitBaseToCanvas();
+      // Place hat at center if not visible
+      if(!hat.visible){
+        hat.x = canvas.clientWidth/2;
+        hat.y = canvas.clientHeight/2;
+      }
+      draw();
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  // Add hat
+  addHatBtn.addEventListener('click', ()=>{
+    hat.visible = true;
+    hat.scale = 1;
+    hat.rot = 0;
+    hat.x = canvas.clientWidth/2;
+    hat.y = canvas.clientHeight/2;
+    draw();
+  });
+
+  // Reset
+  resetHatBtn.addEventListener('click', ()=>{
+    hat.scale = 1;
+    hat.rot = 0;
+    hat.x = canvas.clientWidth/2;
+    hat.y = canvas.clientHeight/2;
+    draw();
+  });
+
+  // Mouse interactions
+  canvas.addEventListener('mousedown', e=>{
+    const p = getMousePos(e);
+    if(hitHat(p)){ dragging = true; lastPos = p; e.preventDefault(); }
+  });
+  window.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const p = getMousePos(e);
+    const dx = p.x - lastPos.x;
+    const dy = p.y - lastPos.y;
+    hat.x += dx; hat.y += dy;
+    lastPos = p;
+    draw();
+  });
+  window.addEventListener('mouseup', ()=>{ dragging=false; });
+
+  // Mouse wheel: scale (Alt+wheel = rotate)
+  canvas.addEventListener('wheel', e=>{
+    e.preventDefault();
+    const over = getMousePos(e);
+    if(!hitHat(over)) return;
+    if(e.altKey){
+      hat.rot += (-e.deltaY) * 0.0025; // rotate
+    }else{
+      const s = Math.exp((-e.deltaY) * 0.001); // scale smoothly
+      hat.scale = Math.max(0.1, Math.min(8, hat.scale * s));
+    }
+    draw();
+  }, {passive:false});
+
+  // Keyboard precision
+  window.addEventListener('keydown', e=>{
+    let nudge = 1;
+    if(e.shiftKey) nudge = 5;
+    switch(e.key){
+      case 'ArrowUp':   hat.y -= nudge; draw(); break;
+      case 'ArrowDown': hat.y += nudge; draw(); break;
+      case 'ArrowLeft': hat.x -= nudge; draw(); break;
+      case 'ArrowRight':hat.x += nudge; draw(); break;
+      case '[': hat.rot -= 0.03; draw(); break;
+      case ']': hat.rot += 0.03; draw(); break;
+      case '+':
+      case '=': hat.scale = Math.min(8, hat.scale*1.05); draw(); break;
+      case '-': hat.scale = Math.max(0.1, hat.scale/1.05); draw(); break;
+    }
+  });
+
+  // Touch interactions (prevent page zoom/scroll while interacting)
+  function preventDefaultAll(e){ e.preventDefault(); }
+  ['touchstart','touchmove','touchend','touchcancel'].forEach(type=>{
+    canvas.addEventListener(type, preventDefaultAll, {passive:false});
+  });
+
+  canvas.addEventListener('touchstart', e=>{
+    for(const t of e.changedTouches){
+      touches.set(t.identifier, getTouchPos(t));
+    }
+    if(touches.size === 1){
+      const p = touches.values().next().value;
+      if(hitHat(p)){ dragging = true; lastPos = p; }
+    } else if(touches.size === 2){
+      const [a,b] = [...touches.values()];
+      pinchStart = {
+        dist: dist(a,b),
+        angle: angle(a,b),
+        center: mid(a,b),
+        scale0: hat.scale,
+        rot0: hat.rot,
+        x0: hat.x,
+        y0: hat.y
+      };
+    }
+  }, {passive:false});
+
+  canvas.addEventListener('touchmove', e=>{
+    for(const t of e.changedTouches){
+      touches.set(t.identifier, getTouchPos(t));
+    }
+    if(touches.size === 1 && dragging){
+      const p = touches.values().next().value;
+      const dx = p.x - lastPos.x;
+      const dy = p.y - lastPos.y;
+      hat.x += dx; hat.y += dy;
+      lastPos = p;
+      draw();
+    } else if(touches.size === 2 && pinchStart){
+      const [a,b] = [...touches.values()];
+      const newDist = dist(a,b);
+      const newAngle = angle(a,b);
+      const newCenter = mid(a,b);
+
+      // scale & rotate
+      const scaleFactor = newDist / pinchStart.dist;
+      hat.scale = Math.max(0.1, Math.min(8, pinchStart.scale0 * scaleFactor));
+      hat.rot = pinchStart.rot0 + (newAngle - pinchStart.angle);
+
+      // translate following center movement
+      hat.x = pinchStart.x0 + (newCenter.x - pinchStart.center.x);
+      hat.y = pinchStart.y0 + (newCenter.y - pinchStart.center.y);
+      draw();
+    }
+  }, {passive:false});
+
+  canvas.addEventListener('touchend', e=>{
+    for(const t of e.changedTouches){ touches.delete(t.identifier); }
+    if(touches.size < 2) pinchStart = null;
+    if(touches.size === 0){ dragging = false; lastPos = null; }
+  });
+
+  canvas.addEventListener('touchcancel', e=>{
+    touches.clear(); dragging=false; pinchStart=null; lastPos=null;
+  });
+
+  // Initial draw (empty)
+  draw();
+})();
+</script>
+
+
 
   </main>
 
