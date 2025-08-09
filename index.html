@@ -302,10 +302,13 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
-.canvas-tip{
-  margin: 0.5rem 0 0;
-  font-size: 0.85rem;
-  opacity: 0.9;
+.canvas-tip {
+  background: var(--blue-title, #2877cd);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.5rem 0.9rem;
+  display: inline-block;
+  margin-top: 0.75rem;
 }
 
 /* Mobile tweaks */
@@ -460,13 +463,15 @@ body {
   </h2>
 
   <div class="canvas-controls">
-    <label class="file-btn">
-      <input type="file" id="imgUpload" accept="image/png,image/jpeg" />
-      Upload PNG/JPG
-    </label>
-    <button id="addHatBtn" class="btn">Add hat.png</button>
-    <button id="resetHatBtn" class="btn btn-ghost">Reset</button>
-  </div>
+  <label class="file-btn">
+    <input type="file" id="imgUpload" accept="image/png,image/jpeg" />
+    Upload PNG/JPG
+  </label>
+  <button id="downloadBtn" class="btn">Download</button>
+  <button id="addHatBtn" class="btn">Add hat.png</button>
+  <button id="resetHatBtn" class="btn btn-ghost">Reset</button>
+</div>
+
 
   <div class="canvas-wrap">
     <canvas id="hatCanvas" width="900" height="600" aria-label="Hat editor canvas"></canvas>
@@ -595,6 +600,14 @@ body {
     const hh = (hat.h * hat.scale)/2;
     return Math.abs(lx) <= hw && Math.abs(ly) <= hh;
   }
+
+  // Download canvas as PNG
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'mcap-hat.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
 
   // Image upload
   upload.addEventListener('change', e=>{
