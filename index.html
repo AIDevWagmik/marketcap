@@ -379,6 +379,53 @@ footer::before {
   footer::before { height: 28px; }
 }
 
+/* === Subtle depth & interaction (no layout changes) === */
+:root{
+  --elev-1: 0 6px 16px rgba(0,0,0,.16);
+  --elev-2: 0 12px 28px rgba(0,0,0,.22);
+}
+
+/* Light depth on pills & key UI */
+.app-section h2,
+.jupiter-section h2,
+.market-section h2 {
+  box-shadow: var(--elev-1);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.app-section h2:hover,
+.jupiter-section h2:hover,
+.market-section h2:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elev-2);
+}
+
+/* Buttons / app tiles feel tactile */
+.app-launch img,
+#open-jup {
+  box-shadow: var(--elev-1);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.app-launch img:hover,
+#open-jup:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elev-2);
+  filter: saturate(1.04);
+}
+
+/* Better accessibility: strong, clean focus */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid #2877cd;
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Optional: tiny parallax tilt for 3D vibe (applied via [data-tilt]) */
+[data-tilt] {
+  will-change: transform;
+  transform-style: preserve-3d;
+  transition: transform .12s ease;
+}
+
   </style>
 </head>
 <body>
@@ -424,25 +471,30 @@ footer::before {
     </a>
   </div>
 <script>
-  window.addEventListener('load', function(){
-    if (window.Jupiter) {
-      // Initialize but don't auto-open
-      window.Jupiter.init({
-        displayMode: 'modal',
-        formProps: {
-          initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
-          initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
-        }
-      }).then(() => {
-        // Trigger only when clicking the image
-        document.getElementById('open-jup').addEventListener('click', function(){
-          if (window.Jupiter && window.Jupiter.resume) {
-            window.Jupiter.resume();
-          }
-        });
+window.addEventListener('load', function () {
+  if (!window.Jupiter) return;
+
+  // Init quietly (no auto-open)
+  window.Jupiter.init({
+    displayMode: 'modal',
+    formProps: {
+      initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+      initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
+    }
+  }).then(() => {
+    // Bind ONLY the explicit trigger
+    const trigger =
+      document.getElementById('open-jup') ||
+      document.querySelector('.jupiter-section .app-launch, .jupiter-section img');
+
+    if (trigger) {
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (window.Jupiter && window.Jupiter.resume) window.Jupiter.resume();
       });
     }
   });
+});
 </script>
 </div>
 
