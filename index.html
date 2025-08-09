@@ -173,6 +173,77 @@ body {
       .market-section { max-width: 100%; border-radius: 12px; }
       .market-section h2 { font-size: 1.15rem; }
     }
+
+    .memes-section {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.memes-section h2 {
+  display: inline-block;
+  margin: 0 auto 1rem auto;
+  padding: 0.5rem 0.9rem;
+  background: var(--blue-title);
+  color: #fff;
+  font-size: 1.15rem;
+  text-align: center;
+  border-radius: 9999px;
+}
+
+.memes-scroll {
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: memesLoop 30s linear infinite;
+}
+
+.memes-scroll img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.memes-scroll img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+/* Loop animation */
+@keyframes memesLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Fullscreen meme modal */
+#meme-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#meme-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+}
+
+#meme-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -244,6 +315,51 @@ body {
         <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15"></iframe>
       </div>
     </section>
+
+    <div class="memes-section">
+  <h2>$MCAP MEMES</h2>
+  <div class="memes-scroll">
+    <img src="meme1.png" alt="Meme 1">
+    <img src="meme2.png" alt="Meme 2">
+    <img src="meme3.png" alt="Meme 3">
+    <img src="meme4.png" alt="Meme 4">
+    <img src="meme5.png" alt="Meme 5">
+    <img src="meme6.png" alt="Meme 6">
+    <img src="meme7.png" alt="Meme 7">
+    <img src="meme8.png" alt="Meme 8">
+    <img src="meme9.png" alt="Meme 9">
+  </div>
+</div>
+
+<!-- Fullscreen modal for meme -->
+<div id="meme-modal">
+  <span id="meme-close">&times;</span>
+  <img id="meme-full" src="" alt="Expanded Meme">
+</div>
+<script>
+  // Meme modal logic
+  const memeModal = document.getElementById('meme-modal');
+  const memeFull = document.getElementById('meme-full');
+  const memeClose = document.getElementById('meme-close');
+
+  document.querySelectorAll('.memes-scroll img').forEach(img => {
+    img.addEventListener('click', () => {
+      memeFull.src = img.src;
+      memeModal.style.display = 'flex';
+    });
+  });
+
+  memeClose.addEventListener('click', () => {
+    memeModal.style.display = 'none';
+  });
+
+  memeModal.addEventListener('click', (e) => {
+    if (e.target === memeModal) {
+      memeModal.style.display = 'none';
+    }
+  });
+</script>
+
   </main>
 
   <footer>
