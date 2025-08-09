@@ -7,45 +7,30 @@
   <!-- Jupiter Plugin (modal) -->
   <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
-  :root { 
-  --blue-bg: #bde9ff;     /* background + behind hats */
-  --blue-title: #2877cd;  /* section titles + buttons */
-  --colW: 220px;
+/* === MCAP color overrides — paste at END of <style> === */
+:root{
+  --blue: #bde9ff;          /* keep page + hats background */
+  --titleBlue: #2877cd;     /* section titles/buttons */
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; }
+/* Keep site background light */
+body{ background-color: var(--blue) !important; }
 
-body {
-  min-height: 100vh;
-  color: #fff;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  position: relative;
-  overflow-x: hidden;
-  background-color: var(--blue-bg);
-}
-
-/* Titles and headers use the dark blue */
+/* Make all section title pills dark blue (like $MCAP MEMES) */
 .app-section h2,
 .jupiter-section h2,
 .market-section h2,
-#open-jup {
-  background: var(--blue-title);
+.memes-section h2,
+#open-jup{
+  background: var(--titleBlue) !important;
+  color: #fff !important;
 }
 
-.market-section {
-  background: #ffffff; /* White box */
-  color: #000;
-}
-
-.market-section h2 {
-  background: var(--blue-title); /* Dark blue title bar */
-  color: #fff;
-}
-
-/* Optional: Open Swap button if kept */
-#open-jup {
-  background: var(--blue-title);
+/* If you want the Dexscreener box itself blue, keep this.
+   If you prefer a white box, delete this rule. */
+.market-section{
+  background: var(--titleBlue) !important;
+  color:#fff !important;
 }
 
     /* HATS BACKGROUND: continuous top->bottom motion */
@@ -211,7 +196,7 @@ body {
 .memes-track {
   display: flex;
   gap: 1rem;
-  animation: scrollMemes 30s linear infinite;
+  animation: scrollMemes 40s linear infinite;
 }
 
 .memes-track img {
@@ -220,8 +205,8 @@ body {
   object-fit: cover;
   border-radius: 12px;
   flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .memes-track img:hover {
@@ -229,7 +214,7 @@ body {
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
-/* Smooth infinite scroll */
+/* Continuous loop with no reset jump */
 @keyframes scrollMemes {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -305,9 +290,10 @@ body {
       <span>Open Swap</span>
     </a>
   </div>
- <script>
+<script>
   window.addEventListener('load', function(){
     if (window.Jupiter) {
+      // Initialize but don't auto-open
       window.Jupiter.init({
         displayMode: 'modal',
         formProps: {
@@ -315,9 +301,11 @@ body {
           initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
         }
       }).then(() => {
-        // Don't auto-open; wait for click
+        // Trigger only when clicking the image
         document.getElementById('open-jup').addEventListener('click', function(){
-          window.Jupiter.resume();
+          if (window.Jupiter && window.Jupiter.resume) {
+            window.Jupiter.resume();
+          }
         });
       });
     }
@@ -337,6 +325,7 @@ body {
   <h2>$MCAP MEMES</h2>
   <div class="memes-scroll">
     <div class="memes-track">
+      <!-- First set -->
       <img src="meme1.png" alt="Meme 1">
       <img src="meme2.png" alt="Meme 2">
       <img src="meme3.png" alt="Meme 3">
@@ -346,7 +335,7 @@ body {
       <img src="meme7.png" alt="Meme 7">
       <img src="meme8.png" alt="Meme 8">
       <img src="meme9.png" alt="Meme 9">
-      <!-- Duplicate set for smooth infinite loop -->
+      <!-- Duplicate set for seamless loop -->
       <img src="meme1.png" alt="Meme 1">
       <img src="meme2.png" alt="Meme 2">
       <img src="meme3.png" alt="Meme 3">
@@ -359,6 +348,7 @@ body {
     </div>
   </div>
 </div>
+
 
 <!-- Fullscreen modal for meme -->
 <div id="meme-modal">
