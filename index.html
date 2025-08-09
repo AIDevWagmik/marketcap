@@ -7,7 +7,7 @@
   <!-- Jupiter Plugin (modal) -->
   <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
   <style>
-    :root { --blue: #bde9ff; --colW: 220px; }
+   :root { --blue: #2877cd; --colW: 220px; }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; }
 
@@ -193,27 +193,33 @@
     </div>
 
     <div class="jupiter-section">
-      <h2>Buy $MCAP directly with Jupiter</h2>
-      <button id="open-jup">Open Swap</button>
-      <script>
-        window.addEventListener('load', function(){
-          if(window.Jupiter){
-            window.Jupiter.init({
-              displayMode: 'modal',
-              formProps: {
-                initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
-                initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
-              }
-            });
+  <h2>Buy $MCAP directly with Jupiter</h2>
+  <div class="app-launch-wrap">
+    <a class="app-launch" href="javascript:void(0)" id="open-jup">
+      <img src="jupiter.png" alt="Open Jupiter Swap" />
+      <span>Open Swap</span>
+    </a>
+  </div>
+  <script>
+    window.addEventListener('load', function(){
+      if(window.Jupiter){
+        window.Jupiter.init({
+          displayMode: 'modal',
+          formProps: {
+            initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+            initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
           }
         });
-        document.addEventListener('click', function(e){
-          if(e.target && e.target.id === 'open-jup' && window.Jupiter && window.Jupiter.resume){
-            window.Jupiter.resume();
-          }
-        });
-      </script>
-    </div>
+      }
+    });
+    document.addEventListener('click', function(e){
+      if(e.target.closest('#open-jup') && window.Jupiter && window.Jupiter.resume){
+        window.Jupiter.resume();
+      }
+    });
+  </script>
+</div>
+
 
     <section class="market-section">
       <h2>In the cap we believe</h2>
