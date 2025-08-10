@@ -327,12 +327,22 @@ body {
 }
 
 .canvas-tip {
-  background: var(--blue-title, #2877cd);
+  background: #28a745;
   color: #fff;
   border-radius: 9999px;
   padding: 0.5rem 0.9rem;
   display: inline-block;
   margin-top: 0.75rem;
+}
+
+/* Mobile-only: make the instructions pill smaller */
+@media (max-width: 480px){
+  .canvas-tip{
+    font-size: .82rem;      /* smaller text */
+    padding: .32rem .6rem;  /* smaller background area */
+    border-radius: 9999px;  /* keep pill look */
+    margin-top: .5rem;      /* a bit tighter spacing */
+  }
 }
 
 /* Mobile tweaks */
@@ -567,7 +577,7 @@ html[data-theme="dark"] .brightness{ background: rgba(0,0,0,.25); }
 .appearance-title {
   display: inline-block;
   padding: 0.5rem 0.9rem;
-  background: #28a745; /* green */
+  background: var(--blue-title, #2877cd) 
   color: #fff;
   border-radius: 9999px;
   box-shadow:
@@ -1095,7 +1105,7 @@ resetHatBtn.addEventListener('click', () => {
 </script>
 
 <section class="appearance-section">
-  <h2 class="appearance-title">Customize your MCAP experience</h2>
+  <h2 class="appearance-title">Light / Dark mode</h2>
   <div class="appearance-panel">
     <label class="toggle" title="Toggle light/dark">
       <input id="themeToggle" type="checkbox" style="accent-color:#2877cd;">
