@@ -109,17 +109,14 @@ body {
       gap: 2rem;
     }
 
-    .app-section, .jupiter-section { width: 100%; max-width: 1200px; color: #fff; }
-    .app-section h2, .jupiter-section h2 {
-      display: inline-block;
-      margin: 0 auto 1rem auto;
-      padding: 0.5rem 0.9rem;
-      background: var(--blue-title);
-      color: #fff;
-      font-size: 1.15rem;
-      text-align: center;
-      border-radius: 9999px;
-    }
+    .app-section h2,
+.jupiter-section h2 {
+  display: inline-block;
+  background: var(--blue-title);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.5rem 0.9rem;
+}
 
     .market-section {
       width: 100%;
@@ -379,72 +376,6 @@ footer::before {
   footer::before { height: 28px; }
 }
 
-/* === Subtle depth & interaction (no layout changes) === */
-/* === Unified depth + floating cards (non-intrusive) === */
-:root{
-  --elev-1: 0 6px 16px rgba(0,0,0,.16);
-  --elev-2: 0 12px 28px rgba(0,0,0,.22);
-}
-
-/* 1) Floating card depth for sections (no color/layout changes) */
-.app-section,
-.jupiter-section,
-.market-section,
-.memes-section,
-.canvas-section{
-  position: relative;
-  border-radius: 16px;
-  box-shadow: var(--elev-1);
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.app-section:hover,
-.jupiter-section:hover,
-.market-section:hover,
-.memes-section:hover,
-.canvas-section:hover{
-  transform: translateY(-3px);
-  box-shadow: var(--elev-2);
-}
-
-/* 2) Light depth on title pills & helper pills */
-.app-section h2,
-.jupiter-section h2,
-.market-section h2,
-.memes-section h2,
-.canvas-section h2,
-.canvas-tip{
-  box-shadow: var(--elev-1);
-  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-}
-.app-section h2:hover,
-.jupiter-section h2:hover,
-.market-section h2:hover,
-.memes-section h2:hover,
-.canvas-section h2:hover,
-.canvas-tip:hover{
-  transform: translateY(-2px);
-  box-shadow: var(--elev-2);
-}
-
-/* 3) Buttons / app tiles feel tactile */
-.app-launch img,
-#open-jup{
-  box-shadow: var(--elev-1);
-  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-}
-.app-launch img:hover,
-#open-jup:hover{
-  transform: translateY(-3px);
-  box-shadow: var(--elev-2);
-  filter: saturate(1.04);
-}
-
-/* 4) Better accessibility focus */
-:where(a, button, [tabindex]):focus-visible{
-  outline: 2px solid #2877cd;
-  outline-offset: 2px;
-  border-radius: 12px;
-}
   </style>
 </head>
 <body>
@@ -475,7 +406,7 @@ footer::before {
       <h2>Buy your cap, the market isn't waiting</h2>
       <div class="app-launch-wrap">
         <a class="app-launch" href="https://themarketingisinthemcap.com/" target="_blank" rel="noopener noreferrer">
-          <img src="mcap.png" alt="Open App" />
+          <img src="buy.png" alt="Open App" />
           <span>Open the app</span>
         </a>
       </div>
@@ -649,14 +580,6 @@ window.addEventListener('load', function () {
   let hatImg = new Image();
   hatImg.src = 'hat.png';
   let hat = {
-    x: 0, y: 0,        // center position in canvas CSS pixels
-    w: 220, h: 160,    // natural draw size
-    scale: 1,
-    rot: 0,            // radians
-    visible: false
-  };
-
-  let hat = {
   x: 0, y: 0,
   w: 220, h: 160,
   scale: 1,
@@ -724,24 +647,13 @@ window.addEventListener('load', function () {
       ctx.save();
       ctx.translate(hat.x, hat.y);
       ctx.rotate(hat.rot);
+      ctx.scale(hat.flipX, 1); // <-- horizontal flip
       const dw = hat.w * hat.scale;
       const dh = hat.h * hat.scale;
       ctx.drawImage(hatImg, -dw/2, -dh/2, dw, dh);
       ctx.restore();
     }
   }
-
-  // hat
-if (hat.visible && hatImg.complete) {
-  ctx.save();
-  ctx.translate(hat.x, hat.y);
-  ctx.rotate(hat.rot);
-  ctx.scale(hat.flipX, 1); // <-- horizontal flip
-  const dw = hat.w * hat.scale;
-  const dh = hat.h * hat.scale;
-  ctx.drawImage(hatImg, -dw/2, -dh/2, dw, dh);
-  ctx.restore();
-}
 
   // Hit test: point inside current hat rect
   function hitHat(p){
