@@ -376,6 +376,17 @@ footer::before {
   footer::before { height: 28px; }
 }
 
+/* Green background for meme console buttons */
+.meme-controls .btn,
+.canvas-controls .btn {
+  background: #28a745; /* green */
+  color: #fff;
+}
+.meme-controls .btn:hover,
+.canvas-controls .btn:hover {
+  background: #23913c; /* darker green on hover */
+}
+
   </style>
 </head>
 <body>
@@ -709,14 +720,22 @@ document.getElementById('flipHatBtn').addEventListener('click', () => {
     draw();
   });
 
-  // Reset
-  resetHatBtn.addEventListener('click', ()=>{
-    hat.scale = 1;
-    hat.rot = 0;
-    hat.x = canvas.clientWidth/2;
-    hat.y = canvas.clientHeight/2;
-    draw();
-  });
+ // Reset
+resetHatBtn.addEventListener('click', () => {
+  // Clear everything from canvas
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+  // Remove base image and hide hat
+  baseImg = null;
+  hat.visible = false;
+  hat.scale = 1;
+  hat.rot = 0;
+  hat.x = canvas.clientWidth / 2;
+  hat.y = canvas.clientHeight / 2;
+  hat.flipX = 1; // if you have flip functionality
+
+  draw();
+});
 
   // Mouse interactions
   canvas.addEventListener('mousedown', e=>{
