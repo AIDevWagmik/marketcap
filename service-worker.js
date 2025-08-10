@@ -2,8 +2,8 @@ const CACHE = "mcap-buy-v1";
 const ASSETS = [
   "/app.html",
   "/buy.png",
-  "/buy-192.png",
-  "/buy-512.png",
+  "buy-192.png",
+  "buy-512.png",
   "/manifest.webmanifest"
 ];
 
