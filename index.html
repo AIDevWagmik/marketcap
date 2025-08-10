@@ -558,6 +558,23 @@ html[data-theme="dark"] .brightness{ background: rgba(0,0,0,.25); }
 /* Keep controls readable above animated backgrounds */
 .appearance-section{ position: relative; z-index: 3; }
 
+.appearance-title {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  background: #28a745; /* green */
+  color: #fff;
+  border-radius: 9999px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 6px 14px rgba(0,0,0,.18);
+  text-shadow: 0 1px 0 rgba(0,0,0,.2);
+}
+.appearance-title:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 10px 28px rgba(0,0,0,.26);
+  transform: translateY(-2px);
+}
 
   </style>
 </head>
@@ -1049,7 +1066,7 @@ resetHatBtn.addEventListener('click', () => {
 </script>
 
 <section class="appearance-section">
-  <h2>Appearance</h2>
+  <h2 class="appearance-title">Customize your MCAP experience</h2>
   <div class="appearance-panel">
     <label class="toggle" title="Toggle light/dark">
       <input id="themeToggle" type="checkbox" style="accent-color:#2877cd;">
