@@ -403,6 +403,58 @@ footer::before {
   background: #23913c; /* darker green */
 }
 
+/* Floating social buttons (left column, centered, fixed) */
+.social-fab{
+  position: fixed;
+  left: calc((var(--colW) - 64px) / 2); /* center inside your 220px side strip */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 4;            /* above hats(1) & side-columns(2), below header/main(3+ is fine) */
+  pointer-events: auto;  /* ensure clickable (side-columns use pointer-events:none) */
+}
+
+.social-fab a{ display: block; }
+
+.social-fab img{
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+  border-radius: 16px;
+  background: #ffffff;              /* subtle tile look */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.social-fab img:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+  filter: saturate(1.04);
+}
+
+/* Desktop (already done) ... */
+
+/* Mobile: fix under the top banner, smaller icons */
+@media (max-width: 480px){
+  .social-fab{
+    position: fixed;
+    left: 12px;                /* tuck to the left on mobile */
+    top: calc(var(--headerH, 64px) + 8px); /* just below banner */
+    transform: none;           /* cancel desktop centering */
+    flex-direction: column;
+    gap: 8px;
+    z-index: 6;                /* above page content */
+  }
+  .social-fab img{
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.22);
+  }
+}
+
   </style>
 </head>
 <body>
@@ -488,6 +540,14 @@ footer::before {
 </script>
 </div>
 
+<div class="social-fab">
+  <a href="https://t.me/theMcap" target="_blank" rel="noopener noreferrer" aria-label="Join MCAP on Telegram">
+    <img src="telegram.png" alt="Telegram">
+  </a>
+  <a href="https://x.com/Mcapmovement" target="_blank" rel="noopener noreferrer" aria-label="Follow MCAP on X">
+    <img src="x_image.png" alt="X (Twitter)">
+  </a>
+</div>
 
     <section class="market-section">
       <h2>In the cap we believe</h2>
@@ -582,7 +642,7 @@ footer::before {
     <canvas id="hatCanvas" width="900" height="600" aria-label="Hat editor canvas"></canvas>
   </div>
   <p class="canvas-tip">
-    Desktop: drag to move • Mouse wheel: scale • Alt + wheel: rotate • Arrows: nudge • [ / ]: rotate • +/-: scale
+    Desktop: drag to move • Mouse wheel: scale • Alt + wheel: rotate
     <br>Mobile: 1-finger drag • 2-finger pinch to scale & rotate
   </p>
 </section>
