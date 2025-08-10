@@ -593,6 +593,13 @@ html, body{
   color-scheme: light dark;
 }
 
+/* Forces iOS Safari to repaint fixed layers when toggled */
+.repaint-bump {
+  transform: translateZ(0.1px);
+  -webkit-transform: translateZ(0.1px);
+}
+body { transition: background-color .15s linear; } /* optional: smoother switch */
+
   </style>
 </head>
 <body>
@@ -1118,21 +1125,30 @@ resetHatBtn.addEventListener('click', () => {
     valueEl.textContent = v + '%';
   }
 
-  // Toggle theme
-  themeToggle.addEventListener('change', ()=>{
-  if(themeToggle.checked){
-    html.setAttribute('data-theme','dark');
-    localStorage.setItem('mcap-theme','dark');
-  }else{
-    html.removeAttribute('data-theme');
-    localStorage.setItem('mcap-theme','light');
-  }
-  // iOS repaint
-  requestAnimationFrame(()=>{
-    document.body.style.webkitTransform = 'translateZ(0)';
-    setTimeout(()=>{ document.body.style.webkitTransform = ''; }, 60);
+  // Helper: force iOS Safari to repaint fixed layers
+function bumpFixedLayers() {
+  ['.hat-bg', '#side-columns', 'header', 'footer'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.classList.add('repaint-bump');
+    void el.offsetHeight;                 // reflow
+    requestAnimationFrame(() => el.classList.remove('repaint-bump'));
   });
+}
+
+// Toggle theme (replacement)
+themeToggle.addEventListener('change', () => {
+  const dark = themeToggle.checked;
+  if (dark) {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('mcap-theme', 'dark');
+  } else {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('mcap-theme', 'light');
+  }
+  bumpFixedLayers(); // instant apply on iOS
 });
+
 
   // Brightness slider (75%–115%)
   slider.addEventListener('input', ()=>{
