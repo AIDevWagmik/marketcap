@@ -455,6 +455,110 @@ footer::before {
   }
 }
 
+/* === Title 3D look (non-intrusive) === */
+:root{
+  --titleBlue: var(--blue-title, #2877cd);
+  --title-shadow-1: 0 4px 10px rgba(0,0,0,.18);
+  --title-shadow-2: 0 8px 22px rgba(0,0,0,.22);
+  --site-brightness: 1;            /* for the brightness slider */
+  --page-bg: #bde9ff;              /* Light default page background */
+  --text-color: #ffffff;
+}
+html{ filter: brightness(var(--site-brightness)); }
+
+/* Dark mode variables */
+html[data-theme="dark"]{
+  --page-bg: #0f1724;              /* deep slate */
+  --text-color: #e8eef7;
+  /* keep brand blue but you can darken if you want */
+  --titleBlue: #2877cd;
+}
+
+/* Ensure body uses theme background (override old body bg if needed) */
+body{
+  background: var(--page-bg) !important;
+  color: var(--text-color);
+}
+
+/* Apply 3D pill style to all titles */
+main > h1,
+.app-section h2,
+.jupiter-section h2,
+.market-section h2,
+.memes-section h2,
+.canvas-section h2,
+.canvas-tip{
+  background: var(--titleBlue);
+  color: #fff;
+  display: inline-block;
+  border-radius: 9999px;
+  padding: .5rem .9rem;
+  /* subtle embossed + drop shadow combo */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 6px 14px rgba(0,0,0,.18);
+  text-shadow: 0 1px 0 rgba(0,0,0,.2);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+main > h1:hover,
+.app-section h2:hover,
+.jupiter-section h2:hover,
+.market-section h2:hover,
+.memes-section h2:hover,
+.canvas-section h2:hover,
+.canvas-tip:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 10px 28px rgba(0,0,0,.26);
+}
+
+/* === Appearance section styling (small control panel) === */
+.appearance-section{
+  width: 100%;
+  max-width: 1200px;
+}
+.appearance-panel{
+  margin-top: .5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.toggle{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  border-radius: 9999px;
+  padding: .4rem .8rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+html[data-theme="dark"] .toggle{ background: rgba(0,0,0,.25); }
+
+.brightness{
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  border-radius: 9999px;
+  padding: .4rem .8rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+html[data-theme="dark"] .brightness{ background: rgba(0,0,0,.25); }
+
+.brightness input[type="range"]{
+  width: 160px;
+  accent-color: var(--titleBlue);
+}
+
+/* Keep controls readable above animated backgrounds */
+.appearance-section{ position: relative; z-index: 3; }
+
+
   </style>
 </head>
 <body>
@@ -944,6 +1048,64 @@ resetHatBtn.addEventListener('click', () => {
 })();
 </script>
 
+<section class="appearance-section">
+  <h2>Appearance</h2>
+  <div class="appearance-panel">
+    <label class="toggle" title="Toggle light/dark">
+      <input id="themeToggle" type="checkbox" style="accent-color:#2877cd;">
+      Dark mode
+    </label>
+
+    <label class="brightness" title="Adjust overall brightness">
+      <span>Brightness</span>
+      <input id="brightnessSlider" type="range" min="75" max="115" value="100">
+      <span id="brightnessValue">100%</span>
+    </label>
+  </div>
+</section>
+<script>
+(function(){
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const slider = document.getElementById('brightnessSlider');
+  const valueEl = document.getElementById('brightnessValue');
+
+  // Load saved prefs
+  const savedTheme = localStorage.getItem('mcap-theme');
+  const savedBrightness = localStorage.getItem('mcap-brightness');
+
+  // Default: light
+  if(savedTheme === 'dark'){ html.setAttribute('data-theme','dark'); themeToggle.checked = true; }
+
+  if(savedBrightness){
+    const v = +savedBrightness;
+    html.style.setProperty('--site-brightness', (v/100).toString());
+    slider.value = v;
+    valueEl.textContent = v + '%';
+  }
+
+  // Toggle theme
+  themeToggle.addEventListener('change', ()=>{
+    if(themeToggle.checked){
+      html.setAttribute('data-theme','dark');
+      localStorage.setItem('mcap-theme','dark');
+    }else{
+      html.removeAttribute('data-theme');
+      localStorage.setItem('mcap-theme','light');
+    }
+  });
+
+  // Brightness slider (75%–115%)
+  slider.addEventListener('input', ()=>{
+    const v = +slider.value;            // 75..115
+    html.style.setProperty('--site-brightness', (v/100).toString());
+    valueEl.textContent = v + '%';
+  });
+  slider.addEventListener('change', ()=>{
+    localStorage.setItem('mcap-brightness', slider.value);
+  });
+})();
+</script>
 
 
   </main>
