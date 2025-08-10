@@ -1125,18 +1125,37 @@ resetHatBtn.addEventListener('click', () => {
     valueEl.textContent = v + '%';
   }
 
-  // Helper: force iOS Safari to repaint fixed layers
-function bumpFixedLayers() {
+ function repaintNow() {
+  // 1) Apply the CSS var as an inline bg so iOS paints immediately
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--page-bg').trim();
+  document.documentElement.style.backgroundColor = bg;
+  document.body.style.backgroundColor = bg;
+
+  // 2) Bump the root (viewport layer)
+  const root = document.documentElement;
+  root.classList.add('repaint-bump');
+  root.style.transform = 'translateZ(0.1px)';
+  void root.offsetHeight;
+  requestAnimationFrame(() => {
+    root.classList.remove('repaint-bump');
+    root.style.transform = '';
+  });
+
+  // 3) Bump fixed layers that iOS often fails to repaint
   ['.hat-bg', '#side-columns', 'header', 'footer'].forEach(sel => {
     const el = document.querySelector(sel);
     if (!el) return;
     el.classList.add('repaint-bump');
-    void el.offsetHeight;                 // reflow
+    void el.offsetHeight;
     requestAnimationFrame(() => el.classList.remove('repaint-bump'));
   });
+
+  // 4) Tiny nudge (no visual move) to flush composites
+  window.dispatchEvent(new Event('resize'));
+  window.scrollBy(0, 0);
 }
 
-// Toggle theme (replacement)
+// Toggle theme (drop-in replacement)
 themeToggle.addEventListener('change', () => {
   const dark = themeToggle.checked;
   if (dark) {
@@ -1146,8 +1165,11 @@ themeToggle.addEventListener('change', () => {
     html.removeAttribute('data-theme');
     localStorage.setItem('mcap-theme', 'light');
   }
-  bumpFixedLayers(); // instant apply on iOS
+  repaintNow();
 });
+
+// Also call once after restoring saved prefs, and in your brightness slider 'input' handler:
+repaintNow();
 
 
   // Brightness slider (75%–115%)
