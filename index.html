@@ -387,6 +387,22 @@ footer::before {
   background: #23913c; /* darker green on hover */
 }
 
+/* Green styling for Upload, Download, Flip, Reset buttons */
+.canvas-controls .btn,
+.canvas-controls .file-btn {
+  background: #28a745; /* green */
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.55rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.canvas-controls .btn:hover,
+.canvas-controls .file-btn:hover {
+  background: #23913c; /* darker green */
+}
+
   </style>
 </head>
 <body>
@@ -432,30 +448,43 @@ footer::before {
     </a>
   </div>
 <script>
-window.addEventListener('load', function () {
-  if (!window.Jupiter) return;
+(function(){
+  let jupInited = false;
+  let jupInitPromise = null;
 
-  // Init quietly (no auto-open)
-  window.Jupiter.init({
-    displayMode: 'modal',
-    formProps: {
-      initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
-      initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
-    }
-  }).then(() => {
-    // Bind ONLY the explicit trigger
-    const trigger =
-      document.getElementById('open-jup') ||
-      document.querySelector('.jupiter-section .app-launch, .jupiter-section img');
+  function ensureJupiter(){
+    if (jupInited) return jupInitPromise;
+    if (!window.Jupiter) return Promise.reject(new Error('Jupiter not loaded'));
+
+    jupInited = true;
+    jupInitPromise = window.Jupiter.init({
+      displayMode: 'modal',
+      formProps: {
+        initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+        initialOutputMint: 'HTJjDuxxnxHGoKTiTYLMFQ59gFjSBS3bXiCWJML6bonk'
+      }
+    });
+    return jupInitPromise;
+  }
+
+  window.addEventListener('load', function(){
+    // Bind ONLY the explicit trigger(s)
+    const trigger = document.getElementById('open-jup')
+      || document.querySelector('.jupiter-section .app-launch, .jupiter-section img');
 
     if (trigger) {
-      trigger.addEventListener('click', function (e) {
+      trigger.addEventListener('click', async function(e){
         e.preventDefault();
-        if (window.Jupiter && window.Jupiter.resume) window.Jupiter.resume();
+        try {
+          await ensureJupiter();            // init on first click (no auto-open before)
+          if (window.Jupiter?.resume) window.Jupiter.resume();
+        } catch(err){
+          console.error('Jupiter not ready:', err);
+        }
       });
     }
   });
-});
+})();
 </script>
 </div>
 
