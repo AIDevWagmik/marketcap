@@ -131,7 +131,7 @@ body {
     .market-section h2 {
       margin: 0;
       padding: 0.85rem 1rem;
-      background: var(--blue);
+      background: var(--page-bg);
       color: #fff;
       font-size: 1.4rem;
       text-align: center;
@@ -164,7 +164,7 @@ body {
     }
 
     /* Simple CTA button for opening Jupiter modal */
-    #open-jup { cursor:pointer; background: var(--blue); color:#fff; border:none; border-radius:9999px; padding:0.6rem 1rem; font-weight:700; }
+    #open-jup { cursor:pointer; background: var(--page-bg); color:#fff; border:none; border-radius:9999px; padding:0.6rem 1rem; font-weight:700; }
 
     footer img { width: 100%; height: auto; display: block; }
 
@@ -574,6 +574,23 @@ html[data-theme="dark"] .brightness{ background: rgba(0,0,0,.25); }
     inset 0 1px 0 rgba(255,255,255,.22),
     0 10px 28px rgba(0,0,0,.26);
   transform: translateY(-2px);
+}
+
+/* THEME background & text */
+:root{
+  --page-bg: #bde9ff;   /* light */
+  --text-color: #ffffff;
+}
+html[data-theme="dark"]{
+  --page-bg: #0f1724;   /* dark */
+  --text-color: #e8eef7;
+}
+
+/* Apply theme vars globally (overrides old body background) */
+html, body{
+  background: var(--page-bg) !important;
+  color: var(--text-color) !important;
+  color-scheme: light dark;
 }
 
   </style>
@@ -1103,14 +1120,19 @@ resetHatBtn.addEventListener('click', () => {
 
   // Toggle theme
   themeToggle.addEventListener('change', ()=>{
-    if(themeToggle.checked){
-      html.setAttribute('data-theme','dark');
-      localStorage.setItem('mcap-theme','dark');
-    }else{
-      html.removeAttribute('data-theme');
-      localStorage.setItem('mcap-theme','light');
-    }
+  if(themeToggle.checked){
+    html.setAttribute('data-theme','dark');
+    localStorage.setItem('mcap-theme','dark');
+  }else{
+    html.removeAttribute('data-theme');
+    localStorage.setItem('mcap-theme','light');
+  }
+  // iOS repaint
+  requestAnimationFrame(()=>{
+    document.body.style.webkitTransform = 'translateZ(0)';
+    setTimeout(()=>{ document.body.style.webkitTransform = ''; }, 60);
   });
+});
 
   // Brightness slider (75%–115%)
   slider.addEventListener('input', ()=>{
