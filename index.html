@@ -380,52 +380,71 @@ footer::before {
 }
 
 /* === Subtle depth & interaction (no layout changes) === */
+/* === Unified depth + floating cards (non-intrusive) === */
 :root{
   --elev-1: 0 6px 16px rgba(0,0,0,.16);
   --elev-2: 0 12px 28px rgba(0,0,0,.22);
 }
 
-/* Light depth on pills & key UI */
+/* 1) Floating card depth for sections (no color/layout changes) */
+.app-section,
+.jupiter-section,
+.market-section,
+.memes-section,
+.canvas-section{
+  position: relative;
+  border-radius: 16px;
+  box-shadow: var(--elev-1);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.app-section:hover,
+.jupiter-section:hover,
+.market-section:hover,
+.memes-section:hover,
+.canvas-section:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--elev-2);
+}
+
+/* 2) Light depth on title pills & helper pills */
 .app-section h2,
 .jupiter-section h2,
-.market-section h2 {
+.market-section h2,
+.memes-section h2,
+.canvas-section h2,
+.canvas-tip{
   box-shadow: var(--elev-1);
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
 }
 .app-section h2:hover,
 .jupiter-section h2:hover,
-.market-section h2:hover {
+.market-section h2:hover,
+.memes-section h2:hover,
+.canvas-section h2:hover,
+.canvas-tip:hover{
   transform: translateY(-2px);
   box-shadow: var(--elev-2);
 }
 
-/* Buttons / app tiles feel tactile */
+/* 3) Buttons / app tiles feel tactile */
 .app-launch img,
-#open-jup {
+#open-jup{
   box-shadow: var(--elev-1);
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
 }
 .app-launch img:hover,
-#open-jup:hover {
+#open-jup:hover{
   transform: translateY(-3px);
   box-shadow: var(--elev-2);
   filter: saturate(1.04);
 }
 
-/* Better accessibility: strong, clean focus */
-:where(a, button, [tabindex]):focus-visible {
+/* 4) Better accessibility focus */
+:where(a, button, [tabindex]):focus-visible{
   outline: 2px solid #2877cd;
   outline-offset: 2px;
   border-radius: 12px;
 }
-
-/* Optional: tiny parallax tilt for 3D vibe (applied via [data-tilt]) */
-[data-tilt] {
-  will-change: transform;
-  transform-style: preserve-3d;
-  transition: transform .12s ease;
-}
-
   </style>
 </head>
 <body>
@@ -582,6 +601,7 @@ window.addEventListener('load', function () {
     Upload PNG/JPG
   </label>
   <button id="downloadBtn" class="btn">Download</button>
+  <button id="flipHatBtn" class="btn">Flip image</button>
   <button id="addHatBtn" class="btn">Add hat.png</button>
   <button id="resetHatBtn" class="btn btn-ghost">Reset</button>
 </div>
@@ -635,6 +655,15 @@ window.addEventListener('load', function () {
     rot: 0,            // radians
     visible: false
   };
+
+  let hat = {
+  x: 0, y: 0,
+  w: 220, h: 160,
+  scale: 1,
+  rot: 0,
+  visible: false,
+  flipX: 1 // +1 normal, -1 flipped
+};
 
   // Pointer state
   let dragging = false;
@@ -702,6 +731,18 @@ window.addEventListener('load', function () {
     }
   }
 
+  // hat
+if (hat.visible && hatImg.complete) {
+  ctx.save();
+  ctx.translate(hat.x, hat.y);
+  ctx.rotate(hat.rot);
+  ctx.scale(hat.flipX, 1); // <-- horizontal flip
+  const dw = hat.w * hat.scale;
+  const dh = hat.h * hat.scale;
+  ctx.drawImage(hatImg, -dw/2, -dh/2, dw, dh);
+  ctx.restore();
+}
+
   // Hit test: point inside current hat rect
   function hitHat(p){
     if(!hat.visible) return false;
@@ -721,6 +762,11 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   link.download = 'mcap-hat.png';
   link.href = canvas.toDataURL('image/png');
   link.click();
+});
+
+document.getElementById('flipHatBtn').addEventListener('click', () => {
+  hat.flipX *= -1; // toggle
+  draw();
 });
 
   // Image upload
