@@ -618,6 +618,16 @@ html, body{
 }
 body { transition: background-color .15s linear; } /* optional: smoother switch */
 
+/* Mobile: faster meme scroll */
+@media (max-width: 480px){
+  .memes-track{
+    animation-duration: 24s; /* was 40s; try 22–26s to taste */
+  }
+}
+
+/* (nice-to-have) smoother on iOS */
+.memes-track{ will-change: transform; }
+
   </style>
 </head>
 <body>
