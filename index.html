@@ -703,6 +703,19 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   -webkit-appearance: none;
 }
 
+/* Mobile: move below banner */
+@media (max-width: 480px) {
+  .buy-banner {
+    position: static;          /* take out of absolute positioning */
+    justify-content: center;   /* center the block */
+    margin: 1rem 0;
+  }
+
+  header {
+    position: relative;        /* keep banner static on mobile */
+  }
+}
+
   </style>
 </head>
 <body>
