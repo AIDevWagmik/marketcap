@@ -695,16 +695,18 @@ html[data-theme="dark"] footer {
   background: url('banner-bottom-dark.png') no-repeat center/cover;
 }
 
+
   </style>
 </head>
 <body>
-  <picture>
-    <!-- Dark mode banner -->
-    <source srcset="banner-top-dark.png" media="(prefers-color-scheme: dark)">
-    <!-- Light mode banner -->
-    <img src="banner-top-light.png" alt="Marketcap banner" loading="eager" />
-  </picture>
-</header>
+  <header>
+    <div class="buy-banner">
+      <h2>Buy your mcap here</h2>
+      <a class="buy-link" href="https://themarketingisinthemcap.com/products/the-marketing-is-the-mcap" target="_blank" rel="noopener noreferrer">
+        <img src="buy.png" alt="Buy MCAP" />
+      </a>
+    </div>
+  </header>
 
   <div class="buy-banner">
     <h2>Buy your mcap here</h2>
@@ -1316,12 +1318,7 @@ if ('serviceWorker' in navigator) {
   </main>
 
  <footer>
-  <picture>
-    <!-- Dark mode banner -->
-    <source srcset="banner-bottom-dark.png" media="(prefers-color-scheme: dark)">
-    <!-- Light mode banner -->
-    <img src="banner-bottom-light.png" alt="MCAP end banner" />
-  </picture>
+  
 </footer>
   
 </body>
