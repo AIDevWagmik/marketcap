@@ -630,15 +630,6 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
-/* Mobile: move buy banner below the header image */
-@media (max-width: 768px) {
-  .buy-banner {
-    position: static;         /* remove absolute positioning */
-    justify-content: center;  /* center it */
-    margin: 1rem auto;        /* space between banner and first section */
-  }
-}
-
 /* Canvas: make Upload match the other buttons exactly */
 .canvas-controls .btn,
 .canvas-controls .file-btn{
@@ -723,11 +714,17 @@ header { position: relative; }
 }
 
 /* Mobile: below the banner */
-@media (max-width: 768px){
+@media (max-width: 768px) {
+  header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 1rem; /* space below banner */
+  }
   .buy-banner {
     position: static;
+    margin-top: auto;
     justify-content: center;
-    margin: 1rem auto;
   }
 }
 
