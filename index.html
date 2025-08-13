@@ -54,34 +54,28 @@ body {
 }
 
   /* HATS BACKGROUND: continuous top->bottom motion */
-   .hat-bg {
-  position: fixed;
-  top: 0; bottom: 0;
-  left: var(--colW);
-  right: var(--colW);
-  pointer-events: none;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  grid-auto-rows: 350px;
-  justify-items: center;
-  align-items: center;
-  will-change: transform;
-  animation: hatsScroll 20s linear infinite;
-  animation-play-state: paused; /* wait until ready */
-}
-
-.hats-ready {
-  animation-play-state: running;
-}
-
-.hat-bg img {
-  width: 100%;
-  max-width: 350px;
-  height: auto;
-  image-rendering: high-quality;
-  opacity: 1;
-}
+    .hat-bg {
+      position: fixed;
+      top: 0; bottom: 0;
+      left: var(--colW);
+      right: var(--colW);
+      pointer-events: none;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      grid-auto-rows: 350px;
+      justify-items: center;
+      align-items: center;
+      will-change: transform;
+      animation: hatsScroll 12s linear infinite;
+    }
+    .hat-bg img {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      image-rendering: high-quality;
+      opacity: 1;
+    }
 
 
     /* SIDE COLUMNS: animated loop from top to bottom (not tied to page scroll) */
@@ -198,7 +192,7 @@ body {
 
     /* Animations */
     @keyframes columnsScroll { from { background-position-y: 0; } to { background-position-y: 1000px; } }
-    @keyframes hatsScroll { from { transform: translateY(0); } to { transform: translateY(var(--scroll-distance)); } }
+    @keyframes hatsScroll { from { transform: translateY(0); } to { transform: translateY(250px); } }
 
     @media (max-width: 480px) {
       #side-columns { display: none; }
@@ -766,32 +760,16 @@ html[data-theme="dark"] footer {
   </a>
 </div>
 
-<div class="hat-bg" aria-hidden="true">
-  <script>
-    const hats = [
-      "hat1.png","hat2.png","hat3.png","hat4.png","hat5.png",
-      "hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"
-    ];
-    const container = document.currentScript.parentNode;
-
-    // Generate 2 identical sets
-    for (let j = 0; j < 2; j++) {
-      for (let i = 0; i < 40; i++) {
-        const img = document.createElement('img');
-        img.src = hats[i % hats.length];
-        container.appendChild(img);
+ <div class="hat-bg" aria-hidden="true">
+    <script>
+      const hats = ["hat1.png","hat2.png","hat3.png","hat4.png","hat5.png","hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"];
+      for(let i=0;i<40;i++){
+        const img=document.createElement('img');
+        img.src=hats[i % hats.length];
+        document.currentScript.parentNode.appendChild(img);
       }
-    }
-
-    // Wait until images are loaded
-    window.addEventListener('load', () => {
-      const totalHeight = container.scrollHeight / 2; // one set
-      container.style.setProperty('--scroll-distance', totalHeight + 'px');
-      container.classList.add('hats-ready'); // start animation
-    });
-  </script>
-</div>
-
+    </script>
+  </div>
 
   <div id="side-columns" aria-hidden="true">
     <div class="col left"></div>
