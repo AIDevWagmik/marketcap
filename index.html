@@ -706,21 +706,43 @@ html[data-theme="dark"] footer {
   }
 }
 
+/* Anchor buy banner inside header for desktop */
+header { position: relative; }
+
+/* Desktop: bottom-right overlay */
+@media (min-width: 769px){
+  .buy-banner {
+    position: absolute;
+    right: 80px;
+    bottom: 20px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+/* Mobile: below the banner */
+@media (max-width: 768px){
+  .buy-banner {
+    position: static;
+    justify-content: center;
+    margin: 1rem auto;
+  }
+}
 
   </style>
 </head>
 <body>
  <div class="hero">
-  <header></header>
-
-  <!-- Buy block now sits *after* the banner -->
+  <header> <!-- Buy block now sits *after* the banner -->
   <div class="buy-banner">
     <h2>Buy your mcap here</h2>
     <a class="buy-link" href="https://themarketingisinthemcap.com/products/the-marketing-is-the-mcap" target="_blank" rel="noopener noreferrer">
       <img src="buy.png" alt="Buy MCAP" />
     </a>
   </div>
-</div>
+</div></header>
 
 
   <div class="hat-bg" aria-hidden="true">
