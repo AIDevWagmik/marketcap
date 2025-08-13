@@ -853,6 +853,15 @@ html[data-theme="dark"] footer {
   let baseImg = null;
   let baseDraw = { x:0, y:0, w:0, h:0 }; // fitted rect
 
+  // === Preload placeholder image ===
+const placeholder = new Image();
+placeholder.src = 'placeholder.png'; // change to your placeholder file name
+placeholder.onload = () => {
+  baseImg = placeholder;
+  fitBaseToCanvas();
+  draw();
+};
+
   // Hat state
   let hatImg = new Image();
   hatImg.src = 'hat.png';
