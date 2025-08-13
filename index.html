@@ -685,9 +685,25 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   <main>
 
     <section class="market-section">
-  <h2>Add your mcap &amp; join the cult</h2>
+  <h2 style="background: var(--blue-title); color: #fff;">
+    Add your mcap &amp; join the cult
+  </h2>
+
   <div class="mcap-video-wrap">
-    <video src="mcap.mp4" autoplay muted loop playsinline></video>
+    <video class="mcap-video"
+      autoplay
+      muted
+      playsinline
+      webkit-playsinline
+      loop
+      preload="metadata"
+      poster="mcap-poster.jpg">
+      <!-- use the one that actually exists on disk -->
+      <source src="mcap.MP4" type="video/mp4">
+      <!-- fallback (if you rename the file to lowercase) -->
+      <source src="mcap.mp4" type="video/mp4">
+      Sorry, your browser can’t play this video.
+    </video>
   </div>
 </section>
 
