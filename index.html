@@ -143,13 +143,29 @@ body {
       text-align: center;
     }
 
-    #dexscreener-embed { position: relative; width: 100%; padding-bottom: 80%; }
-    @media (min-width: 1400px) {
-      #dexscreener-embed { padding-bottom: 50%; }
-    }
-    #dexscreener-embed iframe {
-      position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: 0;
-    }
+   .dexscreener-embed { position: relative; width: 100%; }
+.dexscreener-embed iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+  border: 0;
+}
+
+/* Desktop version */
+#dexscreener-embed-desktop { padding-bottom: 80%; }
+@media (min-width: 1400px) {
+  #dexscreener-embed-desktop { padding-bottom: 50%; }
+}
+
+/* Mobile version hidden by default on desktop */
+#dexscreener-embed-mobile { display: none; padding-bottom: 140%; }
+
+/* Show mobile on small screens, hide desktop */
+@media (max-width: 768px) {
+  #dexscreener-embed-desktop { display: none; }
+  #dexscreener-embed-mobile { display: block; }
+}
 
     .app-launch-wrap { display: flex; justify-content: center; padding: 1.25rem 0; }
     .app-launch {
@@ -723,9 +739,14 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
 
     <section class="market-section">
       <h2>In the cap we believe</h2>
-      <div id="dexscreener-embed">
-        <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15"></iframe>
-      </div>
+     <div id="dexscreener-embed-desktop" class="dexscreener-embed">
+  <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&loadChartSettings=0&trades=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15"></iframe>
+</div>
+
+<div id="dexscreener-embed-mobile" class="dexscreener-embed">
+  <iframe src="https://dexscreener.com/solana/8dfgrJBLqbnyfitUML6K43sxBKtz3xh3nx6mRYs6rEK7?embed=1&theme=dark&mobile=1"></iframe>
+</div>
+
     </section>
 
    <div class="memes-section">
