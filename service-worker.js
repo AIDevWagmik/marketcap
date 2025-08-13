@@ -1,4 +1,4 @@
-const CACHE = "mcap-buy-v3"; // bump to refresh all static assets
+const CACHE = "mcap-buy-v4"; // bump to refresh all static assets
 
 const ASSETS = [
   "./manifest.json",
@@ -44,6 +44,7 @@ const ASSETS = [
   "./meme9.png",
   "./telegram.png",
   "./x_image.png",
+  "./placeholder.png",
 
   // Video
   "./mcap.MP4"
