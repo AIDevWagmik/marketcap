@@ -660,15 +660,15 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
 }
 
 /* Mobile: move below banner */
-@media (max-width: 480px) {
-  .buy-banner {
-    position: static;          /* take out of absolute positioning */
-    justify-content: center;   /* center the block */
-    margin: 1rem 0;
-  }
-
+/* Mobile: normal flow, so it sits below header */
+@media (max-width: 768px) {
   header {
-    position: relative;        /* keep banner static on mobile */
+    display: block;
+  }
+  .buy-banner {
+    position: static; /* removes absolute positioning */
+    margin: 1rem auto; /* centers it */
+    justify-content: center;
   }
 }
 
@@ -688,6 +688,24 @@ footer {
 }
 html[data-theme="dark"] footer {
   background: url('banner-bottom-dark.png') no-repeat center/cover;
+}
+
+/* Mobile/tablet banners */
+@media (max-width: 768px) {
+  header {
+    aspect-ratio: 1080 / 308; /* ~3.5:1 ratio */
+    background-image: url('banner-top-light-mobile.png');
+  }
+  html[data-theme="dark"] header {
+    background-image: url('banner-top-dark-mobile.png');
+  }
+  footer {
+    aspect-ratio: 1080 / 308;
+    background-image: url('banner-bottom-light-mobile.png');
+  }
+  html[data-theme="dark"] footer {
+    background-image: url('banner-bottom-dark-mobile.png');
+  }
 }
 
 
