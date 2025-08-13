@@ -54,28 +54,34 @@ body {
 }
 
   /* HATS BACKGROUND: continuous top->bottom motion */
-    .hat-bg {
-      position: fixed;
-      top: 0; bottom: 0;
-      left: var(--colW);
-      right: var(--colW);
-      pointer-events: none;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      grid-auto-rows: 350px;
-      justify-items: center;
-      align-items: center;
-      will-change: transform;
-      animation: hatsScroll 20s linear infinite;
-    }
-    .hat-bg img {
-      width: 100%;
-      max-width: 350px;
-      height: auto;
-      image-rendering: high-quality;
-      opacity: 1;
-    }
+   .hat-bg {
+  position: fixed;
+  top: 0; bottom: 0;
+  left: var(--colW);
+  right: var(--colW);
+  pointer-events: none;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-auto-rows: 350px;
+  justify-items: center;
+  align-items: center;
+  will-change: transform;
+  animation: hatsScroll 20s linear infinite;
+  animation-play-state: paused; /* wait until ready */
+}
+
+.hats-ready {
+  animation-play-state: running;
+}
+
+.hat-bg img {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  image-rendering: high-quality;
+  opacity: 1;
+}
 
 
     /* SIDE COLUMNS: animated loop from top to bottom (not tied to page scroll) */
@@ -768,7 +774,7 @@ html[data-theme="dark"] footer {
     ];
     const container = document.currentScript.parentNode;
 
-    // Generate 2 identical sets for seamless looping
+    // Generate 2 identical sets
     for (let j = 0; j < 2; j++) {
       for (let i = 0; i < 40; i++) {
         const img = document.createElement('img');
@@ -777,14 +783,14 @@ html[data-theme="dark"] footer {
       }
     }
 
-    // Calculate and set scroll distance after layout
+    // Wait until images are loaded
     window.addEventListener('load', () => {
-      const totalHeight = container.scrollHeight / 2; // height of one set
+      const totalHeight = container.scrollHeight / 2; // one set
       container.style.setProperty('--scroll-distance', totalHeight + 'px');
+      container.classList.add('hats-ready'); // start animation
     });
   </script>
 </div>
-
 
 
   <div id="side-columns" aria-hidden="true">
