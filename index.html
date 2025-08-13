@@ -192,7 +192,7 @@ body {
 
     /* Animations */
     @keyframes columnsScroll { from { background-position-y: 0; } to { background-position-y: 1000px; } }
-    @keyframes hatsScroll { from { transform: translateY(0); } to { transform: translateY(200px); } }
+    @keyframes hatsScroll { from { transform: translateY(0); } to { transform: translateY(var(--scroll-distance)); } }
 
     @media (max-width: 480px) {
       #side-columns { display: none; }
@@ -760,31 +760,29 @@ html[data-theme="dark"] footer {
   </a>
 </div>
 
- <div class="hat-bg" aria-hidden="true">
-    <script>
-      const hats = ["hat1.png","hat2.png","hat3.png","hat4.png","hat5.png","hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"];
-      for(let i=0;i<40;i++){
-        const img=document.createElement('img');
-        img.src=hats[i % hats.length];
-        document.currentScript.parentNode.appendChild(img);
-      }
-    </script>
-  </div>
+<div class="hat-bg" aria-hidden="true">
+  <script>
+    const hats = [
+      "hat1.png","hat2.png","hat3.png","hat4.png","hat5.png",
+      "hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"
+    ];
+    const container = document.currentScript.parentNode;
 
-  <!-- Duplicate the whole grid for seamless looping -->
-  <div class="hat-bg" aria-hidden="true">
-    <script>
-      const hats2 = [
-        "hat1.png","hat2.png","hat3.png","hat4.png","hat5.png",
-        "hat6.png","hat7.png","hat8.png","hat9.png","hat10.png"
-      ];
-      for(let i=0; i<40; i++){
-        const img=document.createElement('img');
-        img.src=hats2[i % hats2.length];
-        document.currentScript.parentNode.appendChild(img);
+    // Generate 2 identical sets for seamless looping
+    for (let j = 0; j < 2; j++) {
+      for (let i = 0; i < 40; i++) {
+        const img = document.createElement('img');
+        img.src = hats[i % hats.length];
+        container.appendChild(img);
       }
-    </script>
-  </div>
+    }
+
+    // Calculate and set scroll distance after layout
+    window.addEventListener('load', () => {
+      const totalHeight = container.scrollHeight / 2; // height of one set
+      container.style.setProperty('--scroll-distance', totalHeight + 'px');
+    });
+  </script>
 </div>
 
 
