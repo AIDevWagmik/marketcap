@@ -640,37 +640,67 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
 /* Buy icon + pill title on top of banner */
 .buy-banner {
   position: absolute;
-  top: 12px;             /* distance from top of banner */
-  right: 12px;           /* distance from right edge */
+  top: 20px;               /* a bit lower down */
+  right: 80px;             /* moves it toward the center */
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;               /* more space between text and icon */
   z-index: 5;
 }
 
 .buy-banner h2 {
   margin: 0;
-  padding: 0.4rem 0.9rem;
+  padding: 0.5rem 1.2rem;  /* bigger pill */
   background: var(--blue-title);
   color: #fff;
   border-radius: 9999px;
-  font-size: 0.95rem;
+  font-size: 1.05rem;      /* larger text */
   white-space: nowrap;
 }
 
 .buy-banner .buy-link img {
-  width: 40px;           /* smaller icon */
+  width: 56px;             /* bigger icon */
   height: auto;
   display: block;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   background: #fff;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .buy-banner .buy-link img:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
   box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+/* Canvas: make Upload match the other buttons exactly */
+.canvas-controls .btn,
+.canvas-controls .file-btn{
+  font-family: inherit;     /* force same font as body */
+  font-size: 1rem;          /* same size everywhere */
+  line-height: 1;
+  font-weight: 700;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.55rem 1rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* hide the file input, keep label clickable */
+.file-btn input{ display:none; }
+
+/* optional: make native buttons drop UA quirks so both render identical */
+.canvas-controls .btn{
+  appearance: none;
+  -webkit-appearance: none;
 }
 
   </style>
@@ -738,7 +768,7 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   </label>
   <button id="downloadBtn" class="btn">Download</button>
   <button id="flipHatBtn" class="btn">Flip image</button>
-  <button id="addHatBtn" class="btn">Add hat.png</button>
+  <button id="addHatBtn" class="btn">Add Cap</button>
   <button id="resetHatBtn" class="btn btn-ghost">Reset</button>
 </div>
 
