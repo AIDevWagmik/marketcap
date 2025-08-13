@@ -600,40 +600,33 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   border-radius: 0 0 16px 16px; /* matches rounded style */
 }
 
-/* Buy icon + pill title on top of banner */
+/* Buy button position — desktop */
 .buy-banner {
   position: absolute;
-  top: 20px;               /* a bit lower down */
-  right: 80px;             /* moves it toward the center */
+  bottom: 20px;  /* 20px from bottom of banner */
+  right: 80px;   /* adjust to taste */
   display: flex;
   align-items: center;
-  gap: 12px;               /* more space between text and icon */
-  z-index: 10;
+  gap: 12px;
+  z-index: 2; /* above banner background */
 }
 
 .buy-banner h2 {
   margin: 0;
-  padding: 0.5rem 1.2rem;  /* bigger pill */
+  padding: 0.5rem 1.2rem;
   background: var(--blue-title);
   color: #fff;
   border-radius: 9999px;
-  font-size: 1.05rem;      /* larger text */
+  font-size: 1.05rem;
   white-space: nowrap;
 }
 
 .buy-banner .buy-link img {
-  width: 56px;             /* bigger icon */
+  width: 56px;
   height: auto;
-  display: block;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   background: #fff;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.buy-banner .buy-link img:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 /* Canvas: make Upload match the other buttons exactly */
@@ -679,18 +672,19 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   }
 }
 
+/* Top banner */
 header {
-  height: 270px; /* your banner height */
+  aspect-ratio: 1500 / 270; /* keep image ratio */
   background: url('banner-top-light.png') no-repeat center/cover;
 }
-footer {
-  height: 270px; /* your banner height */
-  background: url('banner-bottom-light.png') no-repeat center/cover;
-}
-
-/* Dark mode swap */
 html[data-theme="dark"] header {
   background: url('banner-top-dark.png') no-repeat center/cover;
+}
+
+/* Bottom banner */
+footer {
+  aspect-ratio: 1500 / 270; /* same ratio as your banner image */
+  background: url('banner-bottom-light.png') no-repeat center/cover;
 }
 html[data-theme="dark"] footer {
   background: url('banner-bottom-dark.png') no-repeat center/cover;
