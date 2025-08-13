@@ -600,36 +600,6 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   border-radius: 0 0 16px 16px; /* matches rounded style */
 }
 
-/* Desktop: buy banner bottom-right over header */
-.buy-banner {
-  position: absolute;
-  right: 80px;
-  bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 2;
-}
-
-.buy-banner h2 {
-  margin: 0;
-  padding: 0.5rem 1.2rem;
-  background: var(--blue-title);
-  color: #fff;
-  border-radius: 9999px;
-  font-size: 1.05rem;
-  white-space: nowrap;
-}
-
-.buy-banner .buy-link img {
-  width: 56px;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
 /* Canvas: make Upload match the other buttons exactly */
 .canvas-controls .btn,
 .canvas-controls .file-btn{
@@ -697,47 +667,97 @@ html[data-theme="dark"] footer {
   }
 }
 
-/* Anchor buy banner inside header for desktop */
-header { position: relative; }
-
-/* Desktop: bottom-right overlay */
-@media (min-width: 769px){
-  .buy-banner {
-    position: absolute;
-    right: 80px;
-    bottom: 20px;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+/* === Desktop buy banner styles (inside header) === */
+.buy-banner--desktop {
+  position: absolute;
+  right: 80px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
 }
 
+.buy-banner--desktop h2 {
+  margin: 0;
+  padding: 0.5rem 1.2rem;
+  background: var(--blue-title);
+  color: #fff;
+  border-radius: 9999px;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.buy-banner--desktop .buy-link img {
+  width: 56px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Hide mobile copy by default */
+.buy-banner--mobile {
+  display: none;
+}
+
+/* === Mobile version (below banner, before first section) === */
 @media (max-width: 768px) {
-  header { position: static; } /* stop containing the button */
-  .buy-banner {
-    position: relative;  /* relative to normal page flow */
-    top: 100%;           /* push it one banner-height down */
-    margin: 1rem auto;
-    justify-content: center;
+  /* Hide desktop overlay */
+  .buy-banner--desktop {
+    display: none;
+  }
+
+  /* Show mobile copy */
+  .buy-banner--mobile {
     display: flex;
+    justify-content: center;
+    margin: 1rem auto;
     align-items: center;
     gap: 12px;
+    position: relative;
+    z-index: 4;
+  }
+
+  .buy-banner--mobile h2 {
+    margin: 0;
+    padding: 0.5rem 1.2rem;
+    background: var(--blue-title);
+    color: #fff;
+    border-radius: 9999px;
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  .buy-banner--mobile .buy-link img {
+    width: 56px;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
 }
 
   </style>
 </head>
 <body>
- <div class="hero">
-  <header> <!-- Buy block now sits *after* the banner -->
-  <div class="buy-banner">
+ <header>
+  <div class="buy-banner buy-banner--desktop">
     <h2>Buy your mcap here</h2>
     <a class="buy-link" href="https://themarketingisinthemcap.com/products/the-marketing-is-the-mcap" target="_blank" rel="noopener noreferrer">
       <img src="buy.png" alt="Buy MCAP" />
     </a>
   </div>
-</div></header>
+</header>
+
+<div class="buy-banner buy-banner--mobile">
+  <h2>Buy your mcap here</h2>
+  <a class="buy-link" href="https://themarketingisinthemcap.com/products/the-marketing-is-the-mcap" target="_blank" rel="noopener noreferrer">
+    <img src="buy.png" alt="Buy MCAP" />
+  </a>
+</div>
 
 
   <div class="hat-bg" aria-hidden="true">
