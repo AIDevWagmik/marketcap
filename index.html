@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Basic SEO -->
 <title>MCAP Cult - Put on your MCAP, and join the cult</title>
-<meta name="description" content="Join the MCAP cult. Buy your cap, swap $MCAP, check live charts, explore memes, and create your own MCAP hat edits right in your browser.">
+<meta name="description" content="Join the MCAP cult. Buy your cap, swap $MCAP, check live charts, explore memes, and create your own MCAP hat edits.">
 <meta name="keywords" content="MCAP, Solana, memecoin, crypto, hat, meme, swap, dexscreener, Solana token">
 <meta name="author" content="MCAP Team">
 
 <!-- Open Graph (for Discord, Facebook, LinkedIn) -->
 <meta property="og:title" content="Put on your MCAP, and join the cult">
 <meta property="og:description" content="Buy your cap, swap $MCAP, check live charts, explore memes, and create your own MCAP hat edits.">
-<meta property="og:image" content="https://yourwebsite.com/hat.png">
-<meta property="og:url" content="https://yourwebsite.com/">
+<meta property="og:image" content="https://www.mcapofficial.com/mcap-preview.png">
+<meta property="og:url" content="https://www.mcapofficial.com/">
 <meta property="og:type" content="website">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Put on your MCAP, and join the cult">
 <meta name="twitter:description" content="Join the MCAP cult and create your own MCAP hat edits.">
-<meta name="twitter:image" content="https://yourwebsite.com/hat.png">
+<meta name="twitter:image" content="https://www.mcapofficial.com/mcap-preview.png">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="hat.png">
@@ -1345,7 +1345,21 @@ repaintNow();
 
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+  navigator.serviceWorker.register('/service-worker.js').then(reg => {
+    // Check for updates every time the page loads
+    reg.update();
+
+    // If a new worker is installed and waiting, reload the page
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          console.log('New version available, reloading...');
+          window.location.reload();
+        }
+      });
+    });
+  }).catch(console.error);
 }
 </script>
 
