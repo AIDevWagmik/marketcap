@@ -608,7 +608,7 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   display: flex;
   align-items: center;
   gap: 12px;               /* more space between text and icon */
-  z-index: 5;
+  z-index: 10;
 }
 
 .buy-banner h2 {
@@ -679,11 +679,12 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
   }
 }
 
-/* Light mode default */
 header {
+  height: 270px; /* your banner height */
   background: url('banner-top-light.png') no-repeat center/cover;
 }
 footer {
+  height: 270px; /* your banner height */
   background: url('banner-bottom-light.png') no-repeat center/cover;
 }
 
