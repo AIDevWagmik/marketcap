@@ -644,67 +644,19 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
 /* (nice-to-have) smoother on iOS */
 .memes-track{ will-change: transform; }
 
-/* ——— MCAP hero ——— */
-.hero--mcap{
+.mcap-video-wrap {
   position: relative;
-  height: 100vh;            /* fills the viewport */
-  min-height: 560px;
   width: 100%;
+  background: #000; /* fallback background */
   overflow: hidden;
-  background: #0b0b0f;
 }
 
-.hero--mcap .hero-video{
-  position: absolute;
-  inset: 0;
+.mcap-video-wrap video {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;         /* fully covers the frame */
-  object-position: center;
-  filter: saturate(1.05) contrast(1.05);
-}
-
-/* content layer */
-.hero--mcap .hero-overlay{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: end center;   /* title near bottom center */
-  padding: 6vh 4vw;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(5,5,8,0.55) 0%, rgba(5,5,8,0) 60%);
-}
-
-/* Dexscreener-like heading style: bold, condensed, slight glow */
-.hero-title{
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  text-align: center;
-  line-height: 1.05;
-}
-
-/* tweak this block to match your existing dexscreener header */
-.hero-title--dex{
-  font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
-  font-weight: 800;
-  font-size: clamp(28px, 6vw, 72px);
-  color: #fff;
-  /* neon-ish glow similar to dexscreener feel */
-  text-shadow:
-    0 0 6px rgba(120,220,255,.55),
-    0 0 18px rgba(120,120,255,.35);
-  /* optional gradient ink */
-  background: linear-gradient(90deg, #78dcff 0%, #b999ff 50%, #78dcff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* prefers-reduced-motion: stop video */
-@media (prefers-reduced-motion: reduce){
-  .hero--mcap .hero-video{ display:none; }
-  .hero--mcap{ background:#0b0b0f; }
+  height: auto;
+  max-height: 80vh;         /* keeps it from being too tall */
+  border-radius: 0 0 16px 16px; /* matches rounded style */
 }
 
   </style>
@@ -732,13 +684,10 @@ body { transition: background-color .15s linear; } /* optional: smoother switch 
 
   <main>
 
-    <section id="mcap-hero" class="hero hero--mcap" aria-label="Put on your mcap & join the cult">
-  <video class="hero-video" src="mcap.mp4" autoplay muted playsinline loop preload="metadata"></video>
-
-  <div class="hero-overlay">
-    <h1 class="hero-title hero-title--dex">
-      Put on your mcap &amp; join the cult
-    </h1>
+    <section class="market-section">
+  <h2>Add your mcap &amp; join the cult</h2>
+  <div class="mcap-video-wrap">
+    <video src="mcap.mp4" autoplay muted loop playsinline></video>
   </div>
 </section>
 
