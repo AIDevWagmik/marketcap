@@ -713,18 +713,16 @@ header { position: relative; }
   }
 }
 
-/* Mobile: below the banner */
 @media (max-width: 768px) {
-  header {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 1rem; /* space below banner */
-  }
+  header { position: static; } /* stop containing the button */
   .buy-banner {
-    position: static;
-    margin-top: auto;
+    position: relative;  /* relative to normal page flow */
+    top: 100%;           /* push it one banner-height down */
+    margin: 1rem auto;
     justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 }
 
