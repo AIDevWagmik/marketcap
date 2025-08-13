@@ -36,7 +36,7 @@
   <style>
 /* === MCAP color overrides — paste at END of <style> === */
 :root {
-  --blue-bg: #bde9ff;     /* Page background & hats */
+  --blue-bg: #ffffff;     /* Page background & hats */
   --blue-title: #2877cd;  /* Section titles & buttons */
   --colW: 220px;
 }
@@ -435,56 +435,37 @@ footer::before {
   background: #23913c; /* darker green */
 }
 
-/* Floating social buttons (left column, centered, fixed) */
+/* ——— Social fab: footer, not floating ——— */
 .social-fab{
-  position: fixed;
-  left: calc((var(--colW) - 64px) / 2); /* center inside your 220px side strip */
-  top: 50%;
-  transform: translateY(-50%);
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: auto !important;
+  pointer-events: auto;
+
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 4;            /* above hats(1) & side-columns(2), below header/main(3+ is fine) */
-  pointer-events: auto;  /* ensure clickable (side-columns use pointer-events:none) */
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0 0;
+  padding: 8px 0;
 }
 
-.social-fab a{ display: block; }
-
-.social-fab img{
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  display: block;
-  border-radius: 16px;
-  background: #ffffff;              /* subtle tile look */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-}
-.social-fab img:hover{
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
-  filter: saturate(1.04);
-}
-
-/* Desktop (already done) ... */
-
-/* Mobile: fix under the top banner, smaller icons */
 @media (max-width: 480px){
   .social-fab{
-    position: fixed;
-    left: 12px;                /* tuck to the left on mobile */
-    top: calc(var(--headerH, 64px) + 8px); /* just below banner */
-    transform: none;           /* cancel desktop centering */
-    flex-direction: column;
-    gap: 8px;
-    z-index: 6;                /* above page content */
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    gap: 12px;
   }
-  .social-fab img{
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    box-shadow: 0 8px 18px rgba(0,0,0,.22);
-  }
+}
+
+/* optional: make them a bit smaller when they’re in the footer */
+.social-fab img{
+  width: 56px;
+  height: 56px;
 }
 
 /* === Title 3D look (non-intrusive) === */
@@ -493,7 +474,7 @@ footer::before {
   --title-shadow-1: 0 4px 10px rgba(0,0,0,.18);
   --title-shadow-2: 0 8px 22px rgba(0,0,0,.22);
   --site-brightness: 1;            /* for the brightness slider */
-  --page-bg: #bde9ff;              /* Light default page background */
+  --page-bg: #ffffff;              /* Light default page background */
   --text-color: #ffffff;
 }
 html{ filter: brightness(var(--site-brightness)); }
@@ -612,7 +593,7 @@ html[data-theme="dark"] .brightness{ background: #28a745; }
 
 /* THEME background & text */
 :root{
-  --page-bg: #bde9ff;   /* light */
+  --page-bg: #ffffff;   /* light */
   --text-color: #ffffff;
 }
 html[data-theme="dark"]{
@@ -1084,15 +1065,6 @@ resetHatBtn.addEventListener('click', () => {
 </script>
 </div>
 
-<div class="social-fab">
-  <a href="https://t.me/theMcap" target="_blank" rel="noopener noreferrer" aria-label="Join MCAP on Telegram">
-    <img src="telegram.png" alt="Telegram">
-  </a>
-  <a href="https://x.com/Mcapmovement" target="_blank" rel="noopener noreferrer" aria-label="Follow MCAP on X">
-    <img src="x_image.png" alt="X (Twitter)">
-  </a>
-</div>
-
     <section class="market-section">
       <h2>In the cap we believe</h2>
      <div id="dexscreener-embed-desktop" class="dexscreener-embed">
@@ -1271,6 +1243,15 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js').catch(console.error);
 }
 </script>
+
+  <div class="social-fab">
+  <a href="https://t.me/theMcap" target="_blank" rel="noopener noreferrer" aria-label="Join MCAP on Telegram">
+    <img src="telegram.png" alt="Telegram">
+  </a>
+  <a href="https://x.com/Mcapmovement" target="_blank" rel="noopener noreferrer" aria-label="Follow MCAP on X">
+    <img src="x_image.png" alt="X (Twitter)">
+  </a>
+</div>
     
   </main>
 
